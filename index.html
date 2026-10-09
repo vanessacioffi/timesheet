@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self' 'unsafe-inline'; worker-src 'self'; manifest-src 'self'; style-src 'unsafe-inline'; font-src data:; img-src 'self' data: blob:; connect-src 'none'; object-src 'none'; media-src 'none'; frame-src 'none'; base-uri 'none'; form-action 'none'">
 <link rel="manifest" href="manifest.webmanifest">
-<meta name="theme-color" content="#D7FF3A">
+<meta name="theme-color" content="#F6F4F8">
 <meta name="referrer" content="no-referrer">
 <meta name="robots" content="noindex, nofollow, noarchive">
 <link rel="icon" type="image/png" href="icon-192.png">
@@ -20,7 +20,7 @@
   --lime:#D7FF3A; --on-lime:#15121D;
   --orange:#FFB300; --on-orange:#2E1C00;
   --error:#BA1A1A; --on-error:#FFFFFF; --error-container:#FFDAD6; --on-error-container:#7A0006;
-  --surface:#F6F1FF; --on-surface:#15121D; --on-surface-variant:#4A4458;
+  --surface:#FFFFFF; --on-surface:#15121D; --on-surface-variant:#4A4458;
   --surface-lowest:#FFFFFF; --surface-low:#F1EBFF; --surface-container:#E9E0FF; --surface-high:#E2D7FF; --surface-highest:#D8CBFF;
   --outline:#6E667F; --outline-variant:#D3CAE6; --grid-line:#E6E0F2;
   --inverse-surface:#15121D; --inverse-on-surface:#F4EFFF; --inv-accent:#D7FF3A; --inv-track:rgb(244 239 255 / .16);
@@ -43,6 +43,14 @@
   --c5-bg:#3DDC84; --c5-fg:#00331A;
   --c6-bg:#B79CFF; --c6-fg:#1E0F6E;
   --c7-bg:#15121D; --c7-fg:#F4EFFF;
+  --c8-bg:#FF7A45; --c8-fg:#3A1000;
+  --c9-bg:#14B8A6; --c9-fg:#00201C;
+  --c10-bg:#2F6FED; --c10-fg:#FFFFFF;
+  --c11-bg:#E53950; --c11-fg:#FFFFFF;
+  --c12-bg:#9CCC4A; --c12-fg:#1A2600;
+  --c13-bg:#8D6E63; --c13-fg:#FFFFFF;
+  --c14-bg:#A23ACF; --c14-fg:#FFFFFF;
+  --c15-bg:#7F93A6; --c15-fg:#FFFFFF;
   --shape-s:8px; --shape-m:12px; --shape-l:16px; --shape-xl:28px; --shape-2xl:36px; --shape-full:999px;
   --font:'Roboto Flex', system-ui, -apple-system, 'Helvetica Neue', Arial, sans-serif;
   --elev1:0 1px 2px rgb(21 18 29 / .2), 0 1px 3px 1px rgb(21 18 29 / .1);
@@ -154,7 +162,9 @@ button,input,select,textarea{font:inherit; color:inherit; letter-spacing:inherit
 .nav{display:flex; align-items:center; gap:6px; margin-left:auto; flex-wrap:wrap}
 .nav .ibtn{color:var(--bar-fg)}
 .today-btn{height:40px; padding:0 18px; border-radius:var(--shape-full); border:0; box-shadow:inset 0 0 0 2px var(--bar-line); background:transparent; color:var(--bar-fg); font-weight:700; cursor:pointer}
-.period{display:flex; flex-direction:column; min-width:0; margin:0 8px 0 4px}
+.period{display:flex; flex-direction:column; align-items:center; text-align:center; width:var(--period-w, 280px); margin:0 2px}
+.pnav{display:flex; align-items:center; gap:0; flex:none}
+#todayBtn{margin-right:8px}
 .period .pl{font-size:30px; line-height:30px; font-weight:850; font-stretch:64%; letter-spacing:-.4px; text-transform:uppercase; white-space:nowrap}
 .period .ps{font-size:12px; line-height:16px; font-weight:650; letter-spacing:.4px; opacity:.8}
 .seg{display:inline-flex; gap:4px; padding:4px; border-radius:var(--shape-full); box-shadow:inset 0 0 0 2px var(--bar-line)}
@@ -181,6 +191,14 @@ main,aside{min-width:0}
 .wk-h .num span{position:relative}
 .wk-h.today .num{color:var(--on-primary)}
 .wk-h .menu-btn{margin-left:auto}
+.locchip{max-width:100%; height:22px; padding:0 8px 0 5px; border:0; border-radius:var(--shape-full); font:inherit; font-size:12px; font-weight:700; display:inline-flex; align-items:center; gap:4px; cursor:pointer; white-space:nowrap; overflow:hidden; background:var(--surface-high); color:var(--on-surface)}
+.locchip .ms{font-size:15px}
+.locchip.uff{background:var(--surface-container)}
+.locchip.smart{background:color-mix(in srgb, var(--lime) 60%, var(--surface-lowest)); color:var(--on-lime)}
+.locchip.tras{background:var(--hol-soft-bg); color:var(--hol-soft-fg)}
+.locchip.none{background:transparent; box-shadow:inset 0 0 0 1px var(--outline-variant); color:var(--on-surface-variant); font-weight:600}
+.locchip:hover{filter:brightness(.96)}
+.tag.lc{background:var(--surface-high); color:var(--on-surface)}
 .wk-h .meta{display:flex; align-items:center; gap:6px; min-height:22px; font-size:12px; flex-wrap:wrap}
 .wk-h .hol{display:inline-flex; gap:4px; align-items:center; font-weight:750; font-size:11px; line-height:14px; letter-spacing:.2px}
 .wk-h .hol .ms{font-size:15px}
@@ -423,7 +441,7 @@ body.dragging, body.dragging *{cursor:copy!important; user-select:none}
 
 /* ---- colori moderati: superfici neutre, accenti solo sui dati ---- */
 :root{ --acc:#4A3AD8; --acc-warn:#A85F00; --acc-ok:#2E7D32; --warn-soft-bg:#FFF0D1; --warn-soft-fg:#7A4500; --hol-soft-bg:#FFF3DE; --hol-soft-fg:#8A4B00;
-  --wknd-bg:#F2EEFF; --wknd-fg:#3B2C8F; --wknd-dot:rgb(59 44 143 / .10); --hol-bg:#FFF8EC; --hol-stripe:rgb(255 163 0 / .14); --surface:#F7F5FB; }
+  --wknd-bg:#F2EEFF; --wknd-fg:#3B2C8F; --wknd-dot:rgb(59 44 143 / .10); --hol-bg:#FFF8EC; --hol-stripe:rgb(255 163 0 / .14); --surface:#FFFFFF; }
 @media (prefers-color-scheme: dark){ :root:not([data-theme="light"]){ --acc:#B3A6FF; --acc-warn:#FFC74D; --acc-ok:#8DE08F; --warn-soft-bg:#3A2A0C; --warn-soft-fg:#FFD27A; --hol-soft-bg:#2E2210; --hol-soft-fg:#FFC74D;
   --wknd-bg:#1A1628; --wknd-fg:#CFC4FF; --wknd-dot:rgb(207 196 255 / .08); --hol-bg:#211809; --hol-stripe:rgb(255 179 0 / .07); --surface:#110E17; --fab-bg:#B3A6FF; --fab-fg:#1A0B78; }}
 :root[data-theme="dark"]{ --acc:#B3A6FF; --acc-warn:#FFC74D; --acc-ok:#8DE08F; --warn-soft-bg:#3A2A0C; --warn-soft-fg:#FFD27A; --hol-soft-bg:#2E2210; --hol-soft-fg:#FFC74D;
@@ -483,7 +501,7 @@ body.dragging, body.dragging *{cursor:copy!important; user-select:none}
 .pdel .btn.filled{background:var(--error); color:var(--on-error)}
 
 /* ---- mix: neutro nelle superfici di lavoro, pop nei punti chiave ---- */
-:root{ --wknd-bg:#E8E0FF; --wknd-fg:#2E1E99; --wknd-dot:rgb(46 30 153 / .12); --hol-soft-bg:#FFE2A8; --hol-soft-fg:#5A3300; --hol-bg:#FFF3DC; --hol-stripe:rgb(255 163 0 / .2); --surface:#F4F0FF; --warn-soft-bg:#FFE6B0; --warn-soft-fg:#6A3C00; }
+:root{ --wknd-bg:#E8E0FF; --wknd-fg:#2E1E99; --wknd-dot:rgb(46 30 153 / .12); --hol-soft-bg:#FFE2A8; --hol-soft-fg:#5A3300; --hol-bg:#FFF3DC; --hol-stripe:rgb(255 163 0 / .2); --surface:#FFFFFF; --warn-soft-bg:#FFE6B0; --warn-soft-fg:#6A3C00; }
 @media (prefers-color-scheme: dark){ :root:not([data-theme="light"]){ --wknd-bg:#221A44; --wknd-fg:#D4C9FF; --wknd-dot:rgb(212 201 255 / .1); --hol-soft-bg:#4A3208; --hol-soft-fg:#FFD27A; --hol-bg:#291D0A; --hol-stripe:rgb(255 179 0 / .1); --surface:#110E17; --warn-soft-bg:#4A3208; --warn-soft-fg:#FFD27A; }}
 :root[data-theme="dark"]{ --wknd-bg:#221A44; --wknd-fg:#D4C9FF; --wknd-dot:rgb(212 201 255 / .1); --hol-soft-bg:#4A3208; --hol-soft-fg:#FFD27A; --hol-bg:#291D0A; --hol-stripe:rgb(255 179 0 / .1); --surface:#110E17; --warn-soft-bg:#4A3208; --warn-soft-fg:#FFD27A; }
 .bar{background:var(--bar-bg); color:var(--bar-fg); box-shadow:none}
@@ -545,6 +563,229 @@ body.dragging, body.dragging *{cursor:copy!important; user-select:none}
 .badge .ms{font-size:15px}
 .confirm-box{display:flex; flex-direction:column; gap:10px; padding:12px 14px; border-radius:var(--shape-m); background:var(--error-container); color:var(--on-error-container); font-size:13px}
 @media (prefers-reduced-motion: reduce){ *{transition:none!important; animation:none!important} }
+
+/* weekend discreto */
+:root{ --wknd-bg:#FAF9FC; --wknd-fg:#77717F; --wknd-dot:transparent; }
+@media (prefers-color-scheme: dark){ :root:not([data-theme="light"]){ --wknd-bg:#16131C; --wknd-fg:#9A93A6; --wknd-dot:transparent; }}
+:root[data-theme="dark"]{ --wknd-bg:#16131C; --wknd-fg:#9A93A6; --wknd-dot:transparent; }
+.wk-h.is-wknd .num{font-size:24px}
+.wknd .wbtn{background:transparent; box-shadow:inset 0 0 0 1px var(--outline-variant)}
+
+/* saldo ferie/ROL discreto */
+.card.ink{background:var(--surface-lowest); color:var(--on-surface); box-shadow:0 0 0 1px var(--outline-variant)}
+.card.ink .bal .row b{font-size:26px; line-height:28px; color:var(--on-surface)} .card.ink .bal .row b.neg{color:var(--error)}
+.card.ink .lp{background:var(--surface-high)} .card.ink .lp i{background:var(--on-surface-variant)}
+.card.ink .bal .sub,.card.ink .t-body-s{color:var(--on-surface-variant); opacity:1}
+.card.ink .bal .fut{color:var(--on-surface-variant)}
+.card.ink .btn.text{color:var(--primary)}
+
+/* riepilogo con gerarchia */
+.sum{gap:12px}
+.sum-main{display:flex; align-items:baseline; flex-wrap:wrap; column-gap:8px}
+.sum-main .k{width:100%; font-size:13px; line-height:18px; font-weight:650; color:var(--on-surface-variant)}
+.sum-main .v{font-size:52px; line-height:54px; font-weight:850; font-stretch:62%; letter-spacing:-.6px; color:var(--acc); font-variant-numeric:tabular-nums; white-space:nowrap}
+.sum-main .v small{font-size:24px; font-weight:750; margin:0 2px 0 1px}
+.sum-main .of{font-size:14px; font-weight:600; color:var(--on-surface-variant)}
+.sum-bar{display:flex; gap:2px; height:10px; border-radius:5px; background:var(--surface-high); overflow:hidden}
+.sum-bar i,.sum-leg i{display:block; height:100%; border-radius:5px}
+.sum-bar .lav,.sum-leg .lav{background:var(--acc)} .sum-bar .abs,.sum-leg .abs{background:var(--outline)}
+.sum-leg{display:flex; gap:14px; font-size:12px; font-weight:600; color:var(--on-surface-variant)}
+.sum-leg span{display:inline-flex; align-items:center; gap:6px} .sum-leg i{width:10px; height:10px}
+.sum-status{display:flex; align-items:center; gap:10px; padding:10px 12px; border-radius:var(--shape-m); font-size:14px; line-height:20px; font-weight:600}
+.sum-status .ms{font-size:20px}
+.sum-status.warn{background:var(--warn-soft-bg); color:var(--warn-soft-fg)}
+.sum-status.ok{background:color-mix(in srgb, var(--acc-ok) 12%, var(--surface-lowest)); color:var(--acc-ok)}
+.sum-list{margin:0; display:flex; flex-direction:column}
+.sum-list div{display:flex; justify-content:space-between; align-items:baseline; padding:9px 0; border-top:1px solid var(--outline-variant)}
+.sum-list dt{font-size:14px; color:var(--on-surface-variant)}
+.sum-list dd{margin:0; font-size:16px; font-weight:750; font-variant-numeric:tabular-nums}
+.sum-list dd span{font-size:13px; font-weight:600; color:var(--on-surface-variant)}
+.wk-h .meta{gap:4px}
+.wk-h .meta .tally{height:22px; padding:0 7px}
+
+/* PDF */
+#printRoot{display:none}
+@media print{
+  @page{size:A4; margin:12mm 11mm}
+  body.print-mode{background:#fff!important; color:#15121D}
+  body.print-mode > *:not(#printRoot){display:none!important}
+  body.print-mode #printRoot{display:block}
+  .pr{font-family:var(--font); font-size:10.5px; line-height:14px; color:#15121D; -webkit-print-color-adjust:exact; print-color-adjust:exact}
+  .pr-h{display:flex; justify-content:space-between; align-items:flex-end; border-bottom:2px solid #15121D; padding-bottom:6px; margin-bottom:10px}
+  .pr-h h1{margin:0; font-size:22px; line-height:24px; font-weight:850}
+  .pr-h p{margin:2px 0 0; font-size:12px; font-weight:650}
+  .pr-h .pr-gen{font-size:10px; font-weight:500; color:#5E5869}
+  .pr-tot{display:grid; grid-template-columns:repeat(4,1fr); gap:6px; margin-bottom:8px}
+  .pr-k{border:1px solid #DDD8E6; border-radius:8px; padding:6px 8px; display:flex; flex-direction:column}
+  .pr-k span{font-size:9.5px; color:#5E5869} .pr-k b{font-size:14px; line-height:18px}
+  .pr-projs,.pr-wkf{display:flex; flex-wrap:wrap; gap:4px 12px; align-items:center; margin-bottom:12px}
+  .pr-wkf{margin:6px 0 0}
+  .pr-lbl{font-weight:700; margin-right:4px}
+  .pr-p{display:inline-flex; align-items:center; gap:5px}
+  .pr-p i,.pr-sw{display:inline-block; width:8px; height:8px; border-radius:50%; background:var(--bg, #999); flex:none}
+  .pr-wk{break-inside:avoid; page-break-inside:avoid; margin-bottom:14px}
+  .pr-wkh{display:flex; flex-wrap:wrap; align-items:baseline; gap:4px 10px; margin-bottom:4px}
+  .pr-wkh h2{margin:0; font-size:13px; line-height:16px; font-weight:800}
+  .pr-wd{font-weight:600} .pr-ws{margin-left:auto; color:#5E5869} .pr-ws b{color:#15121D}
+  .pr table{width:100%; border-collapse:collapse; table-layout:fixed}
+  .pr th{text-align:left; font-size:9px; text-transform:uppercase; letter-spacing:.4px; color:#5E5869; font-weight:700; padding:4px 6px; border-bottom:1px solid #15121D}
+  .pr td{padding:5px 6px; border-bottom:1px solid #E6E2EE; vertical-align:top}
+  .pr td small{color:#5E5869}
+  .pr .n{text-align:right; font-variant-numeric:tabular-nums; white-space:nowrap}
+  .pr tr.we td{background:#FAF9FC; color:#5E5869}
+  .pr tr.hol td{background:#FFF6E6}
+  .pr-e{display:flex; flex-wrap:wrap; align-items:center; gap:2px 6px}
+  .pr-e + .pr-e{margin-top:2px}
+  .pr-t{font-variant-numeric:tabular-nums; color:#5E5869; min-width:62px}
+  .pr-eh{color:#5E5869}
+  .pr-n{width:100%; padding-left:68px; color:#5E5869; font-style:italic}
+  .pr-dn{margin-top:3px; color:#5E5869; font-style:italic}
+  .pr-mut{color:#9A93A6}
+  .pr-miss{color:#A85F00; font-weight:700}
+}
+
+/* nota al passaggio */
+.notebtn{border:0; background:transparent; color:inherit; padding:0; width:22px; height:22px; display:inline-grid; place-items:center; border-radius:6px; cursor:pointer}
+.notebtn .ms{font-size:18px}
+.notebtn:hover,.notebtn:focus-visible{background:var(--surface-high)}
+.tipbox{position:fixed; z-index:95; max-width:280px; padding:10px 12px; border-radius:var(--shape-m); background:var(--inverse-surface); color:var(--inverse-on-surface); font-size:13px; line-height:18px; white-space:pre-wrap; overflow-wrap:anywhere; box-shadow:var(--elev3); pointer-events:none}
+/* ridimensiona blocchi */
+.blk .rz{position:absolute; left:0; right:0; height:8px; cursor:ns-resize; z-index:2}
+.blk .rz.t{top:0} .blk .rz.b{bottom:0}
+.blk .rz.b::after{content:''; position:absolute; left:50%; bottom:2px; width:24px; margin-left:-12px; height:3px; border-radius:2px; background:currentColor; opacity:0; transition:opacity .15s}
+.blk:hover .rz.b::after{opacity:.45}
+.blk.xs .rz{height:5px}
+body.resizing,body.resizing *{cursor:ns-resize!important; user-select:none}
+/* widget riordinabili */
+#pane > [data-card]{position:relative}
+.grip{position:absolute; top:2px; left:50%; margin-left:-14px; width:28px; height:16px; padding:0; border:0; border-radius:8px; background:transparent; color:var(--on-surface-variant); display:grid; place-items:center; cursor:grab; opacity:0; transition:opacity .15s; touch-action:none}
+.grip .ms{font-size:16px; transform:rotate(90deg)}
+#pane > [data-card]:hover .grip,.grip:focus-visible{opacity:.7}
+.grip:hover{opacity:1!important; background:var(--surface-high)}
+.card.lifting{box-shadow:var(--elev3), 0 0 0 1px var(--outline-variant)!important; transform:rotate(.6deg); pointer-events:none}
+.card-ph{border-radius:var(--shape-xl); border:2px dashed var(--outline-variant)}
+body.card-dragging,body.card-dragging *{cursor:grabbing!important; user-select:none}
+
+/* ===== v4.8 · mood Material 3 Expressive: viola, lavanda, rosa, corallo =====
+   La griglia del timesheet resta come nella v4.6; cambia tutto ciò che sta intorno. */
+:root{
+  --primary:#6750A4; --on-primary:#FFFFFF; --acc:#6750A4;
+  --plum:#3B1F5C; --on-plum:#F4ECFF;
+  --violet:#B48CF8; --on-violet:#1C0633;
+  --lav:#D9C8FF; --on-lav:#2A0F5E;
+  --lav-soft:#F1EAFD; --on-lav-soft:#1D1530;
+  --pink:#F9B4FC; --on-pink:#5B1460;
+  --coral:#FF8F86; --coral-soft:#FFE0DB; --on-coral:#5A140E;
+  --fab-bg:#F9B4FC; --fab-fg:#5B1460;
+  --bar-blob:#DCCBFF;
+}
+@media (prefers-color-scheme: dark){ :root:not([data-theme="light"]){
+  --primary:#D0BCFF; --on-primary:#381E72; --acc:#D0BCFF; --plum:#E9DDFF; --on-plum:#21123A;
+  --violet:#6A44B8; --on-violet:#FFFFFF; --lav:#4F378B; --on-lav:#EADDFF; --lav-soft:#221C2E; --on-lav-soft:#EDE5F8;
+  --pink:#7A2E7E; --on-pink:#FFD7FC; --coral:#B5463E; --coral-soft:#4A1F1A; --on-coral:#FFDAD4;
+  --fab-bg:#7A2E7E; --fab-fg:#FFD7FC; --bar-blob:#3A2C55; }}
+:root[data-theme="dark"]{
+  --primary:#D0BCFF; --on-primary:#381E72; --acc:#D0BCFF; --plum:#E9DDFF; --on-plum:#21123A;
+  --violet:#6A44B8; --on-violet:#FFFFFF; --lav:#4F378B; --on-lav:#EADDFF; --lav-soft:#221C2E; --on-lav-soft:#EDE5F8;
+  --pink:#7A2E7E; --on-pink:#FFD7FC; --coral:#B5463E; --coral-soft:#4A1F1A; --on-coral:#FFDAD4;
+  --fab-bg:#7A2E7E; --fab-fg:#FFD7FC; --bar-blob:#3A2C55; }
+
+/* barra in alto: lavanda con forme organiche, biscotto viola, controlli a pillola */
+.bar{background:var(--lav); color:var(--on-lav); box-shadow:none; overflow:hidden}
+.bar .blob{display:block; fill:var(--bar-blob)}
+.bar .blob.b1{fill:color-mix(in srgb, var(--violet) 45%, var(--lav))}
+.logo .shape{fill:var(--plum)} .logo .ms{color:var(--on-plum)!important}
+.nav .ibtn,.actions{color:var(--on-lav)}
+.nav .ibtn:hover,.actions .ibtn:hover{background:color-mix(in srgb, var(--surface-lowest) 55%, transparent)}
+.today-btn{background:var(--surface-lowest); color:var(--on-lav); box-shadow:none}
+.seg{background:var(--surface-lowest); box-shadow:none; padding:4px}
+.seg button{color:var(--on-lav-soft)}
+.seg button[aria-pressed="true"]{background:var(--plum); color:var(--on-plum)}
+.sync{background:color-mix(in srgb, var(--surface-lowest) 60%, transparent); color:var(--on-lav); box-shadow:none}
+.sync.local{background:var(--coral-soft); color:var(--on-coral); box-shadow:none}
+.sync.err{background:var(--coral); color:var(--on-coral); box-shadow:none}
+
+/* pannello: carte lavanda, riepilogo "eroe" viola con numero grande */
+.card,.card.white,.card.ink{background:var(--lav-soft); color:var(--on-lav-soft); box-shadow:none}
+.card.sum{background:var(--violet); color:var(--on-violet)}
+.card.sum h3,.sum-main .v,.sum-main .k,.sum-main .of{color:var(--on-violet)}
+.sum-main .k,.sum-main .of{opacity:.78}
+.sum-main .v{font-size:60px; line-height:58px; letter-spacing:-1px}
+.sum-main .v small{font-size:28px}
+.sum-bar{background:color-mix(in srgb, var(--surface-lowest) 40%, transparent); height:12px; border-radius:6px}
+.sum-bar .lav,.sum-leg .lav{background:var(--on-violet)} .sum-bar .abs,.sum-leg .abs{background:color-mix(in srgb, var(--surface-lowest) 85%, transparent)}
+.sum-leg{color:var(--on-violet); opacity:.85}
+.sum-status,.sum-status.warn,.sum-status.ok{background:color-mix(in srgb, var(--surface-lowest) 62%, transparent); color:var(--on-violet); border-radius:var(--shape-full); padding:8px 14px}
+.sum-status.warn .ms{color:#B3261E} .sum-status.ok .ms{color:#1E6B2A}
+.sum-list div{border-top-color:color-mix(in srgb, var(--on-violet) 18%, transparent)}
+.sum-list dt,.sum-list dd span{color:var(--on-violet); opacity:.78}
+.sum-list dd{color:var(--on-violet)}
+.btn.tonal{background:var(--lav); color:var(--on-lav)}
+.plist .tr{background:var(--surface-lowest)}
+.abs-it{background:var(--surface-lowest); color:var(--on-surface); border-radius:var(--shape-l)}
+.abs-it .ms{width:36px; height:36px; padding:8px; border-radius:50%; background:var(--bg); color:var(--fg); box-sizing:border-box}
+.abs-it div span{color:var(--on-surface-variant); opacity:1}
+.card.ink .bal .row b{color:var(--on-lav-soft)} .card.ink .lp{background:var(--surface-lowest)} .card.ink .lp i{background:var(--primary)}
+.card.ink .btn.text{color:var(--primary)}
+.hlist .dt{background:var(--coral-soft); color:var(--on-coral); border-radius:var(--shape-l)}
+.banner{background:var(--coral-soft); color:var(--on-coral); box-shadow:none}
+.banner > .ms{color:inherit}
+.banner .btn{background:var(--plum); color:var(--on-plum)}
+.banner.err{background:var(--coral); color:var(--on-coral)}
+.grip:hover{background:color-mix(in srgb, var(--surface-lowest) 60%, transparent)}
+
+/* azione principale: FAB rosa, forma quadrata arrotondata */
+.fab{background:var(--fab-bg); color:var(--fab-fg); border-radius:24px; box-shadow:var(--elev3)}
+.fab:hover{border-radius:32px}
+
+/* finestre e menu */
+.dlg{background:var(--surface-lowest)}
+.hd-ic{background:var(--lav); color:var(--on-lav); border-radius:50%}
+.chip[aria-pressed="true"]{box-shadow:none}
+.chip:not([data-type])[aria-pressed="true"]{background:var(--plum); color:var(--on-plum)}
+.chip[data-type="lav"][aria-pressed="true"]{background:var(--lav); color:var(--on-lav)}
+.chip.assist{box-shadow:none; background:var(--lav-soft); color:var(--on-lav-soft)}
+.dlg .chip:not([aria-pressed="true"]){box-shadow:none; background:var(--lav-soft); color:var(--on-lav-soft)}
+.dlg .chip:not([aria-pressed="true"]):hover{background:var(--lav)}
+.menu{background:var(--surface-lowest); border-radius:var(--shape-xl); padding:10px}
+.menu button{border-radius:var(--shape-full)}
+.menu button:hover,.menu button:focus-visible{background:var(--lav-soft)}
+.tipbox{background:var(--plum); color:var(--on-plum); border-radius:var(--shape-l)}
+
+/* intestazione giorno: luogo = chip piena, ore = contorno */
+.locchip.uff{background:var(--lav); color:var(--on-lav)}
+.locchip.smart{background:var(--pink); color:var(--on-pink)}
+.locchip.tras{background:var(--coral-soft); color:var(--on-coral)}
+.tally,.wk-h .meta .tally{background:transparent; color:var(--on-surface-variant); box-shadow:inset 0 0 0 1px var(--outline-variant); font-weight:650}
+.tally.full,.wk-h .meta .tally.full{background:transparent; color:var(--acc-ok); box-shadow:inset 0 0 0 1px color-mix(in srgb, var(--acc-ok) 45%, transparent)}
+.tally.warn,.wk-h .meta .tally.warn{background:transparent; color:var(--acc-warn); box-shadow:inset 0 0 0 1px color-mix(in srgb, var(--acc-warn) 45%, transparent)}
+
+/* funzioni della griglia (stile invariato) */
+.blk.lane{padding-left:6px; padding-right:4px}
+.blk.lane .l1{font-size:11.5px}
+.blk.moving{opacity:.3}
+.blk.preview{z-index:6; pointer-events:none; align-items:stretch; text-align:left; box-shadow:var(--elev3); outline:2px solid var(--primary); outline-offset:-1px}
+
+/* ===== v4.9 · meno viola: neutri caldi come base, viola solo nel riepilogo e nel logo ===== */
+:root{
+  --lav:#ECE9EF; --on-lav:#1D1B20;          /* contenitore tonale neutro */
+  --lav-soft:#F6F4F8; --on-lav-soft:#1D1B20; /* carte */
+  --plum:#1F1A24; --on-plum:#FFFFFF;         /* selezione: inchiostro scuro */
+  --pink-soft:#FDE3FD;
+}
+@media (prefers-color-scheme: dark){ :root:not([data-theme="light"]){
+  --lav:#2E2B33; --on-lav:#ECE8F1; --lav-soft:#1F1D23; --on-lav-soft:#ECE8F1; --plum:#ECE8F1; --on-plum:#1F1A24; --pink-soft:#4A2149; }}
+:root[data-theme="dark"]{
+  --lav:#2E2B33; --on-lav:#ECE8F1; --lav-soft:#1F1D23; --on-lav-soft:#ECE8F1; --plum:#ECE8F1; --on-plum:#1F1A24; --pink-soft:#4A2149; }
+.bar{background:var(--lav-soft); color:var(--on-lav-soft)}
+.bar .blob.b2{display:none}
+.bar .blob.b1{fill:var(--pink-soft)}
+.logo .shape{fill:var(--violet)} .logo .ms{color:var(--on-violet)!important}
+.seg,.today-btn{background:var(--surface-lowest); box-shadow:inset 0 0 0 1px var(--outline-variant)}
+.locchip.uff{background:var(--lav); color:var(--on-lav)}
+.hd-ic{background:var(--pink-soft); color:var(--on-pink)}
+.btn.filled{background:var(--plum); color:var(--on-plum)}
+.dlg .btn.text:not(.danger){color:var(--on-surface)}
 </style>
 </head>
 <body>
@@ -558,10 +799,10 @@ body.dragging, body.dragging *{cursor:copy!important; user-select:none}
       <button class="sync sl" id="sync" aria-label="I tuoi dati"><span class="ms">sync</span><span>Caricamento…</span></button>
     </div>
     <div class="nav">
-      <button class="ibtn sl" id="prev" aria-label="Periodo precedente"><span class="ms">chevron_left</span></button>
-      <button class="today-btn sl" id="todayBtn">Oggi</button>
-      <button class="ibtn sl" id="next" aria-label="Periodo successivo"><span class="ms">chevron_right</span></button>
+      <div class="pnav"><button class="ibtn sl" id="prev" aria-label="Periodo precedente"><span class="ms">chevron_left</span></button>
       <div class="period"><span class="pl" id="periodLabel">—</span><span class="ps" id="periodSub"></span></div>
+      <button class="ibtn sl" id="next" aria-label="Periodo successivo"><span class="ms">chevron_right</span></button></div>
+      <button class="today-btn sl" id="todayBtn">Oggi</button>
       <div class="seg" role="group" aria-label="Visualizzazione">
         <button data-view="week" aria-pressed="true"><span class="ms">view_week</span><span class="lbl">Settimana</span></button>
         <button data-view="month" aria-pressed="false"><span class="ms">calendar_view_month</span><span class="lbl">Mese</span></button>
@@ -603,7 +844,7 @@ body.dragging, body.dragging *{cursor:copy!important; user-select:none}
 'use strict';
 /* sicurezza: l'app non si apre dentro pagine altrui (protezione da clickjacking) */
 if (window.top !== window.self){ document.body.innerHTML = '<p style="font:16px system-ui;padding:24px">Per sicurezza il Timesheet non può essere aperto dentro un’altra pagina. Aprilo direttamente.</p>'; return; }
-const APP_VERSION = '4.1 · 9 ott 2026';
+const APP_VERSION = '4.9 · 9 ott 2026';
 /* ---------- costanti ---------- */
 const DOW_S = ['Lun','Mar','Mer','Gio','Ven','Sab','Dom'];
 const DOW_L = ['lunedì','martedì','mercoledì','giovedì','venerdì','sabato','domenica'];
@@ -616,16 +857,17 @@ const TYPES = {
   perm:  {label:'Permesso', icon:'event_busy', hidden:true},
   mal:   {label:'Malattia', icon:'medical_services'}
 };
-const LOCS = {'':'Non indicato', uff:'Ufficio', smart:'Smart working', tras:'Trasferta'};
+const LOCS = {'':'Non indicato', uff:'In sede', smart:'Smart working', tras:'Trasferta'};
+const LOC_S = {uff:'Sede', smart:'Smart', tras:'Trasferta'};
 const LOC_IC = {uff:'apartment', smart:'home_work', tras:'flight_takeoff'};
-const NCOL = 8, ROW = 48, SNAP = 15;
+const NCOL = 16, ROW = 48, SNAP = 15;
 const LS_KEY = 'timesheet.personale.v1';
 const NEWOPT = '<option value="__new__">＋ Nuovo progetto…</option>';
 const NONE_KEY = '_none', NOP_STYLE = '--bg:var(--surface-highest);--fg:var(--on-surface)';
 const noneOpt = sel => `<option value=""${sel ? '' : ' selected'}>Nessun progetto</option>`;
 const projName = id => id === NONE_KEY ? 'Senza progetto' : (proj(id) ? proj(id).name : 'Progetto rimosso');
 const projStyle = id => id === NONE_KEY ? NOP_STYLE : pStyle(proj(id));
-const ICONS = {"add":"M450-450H200v-60h250v-250h60v250h250v60H510v250h-60v-250Z","apartment":"M120-120v-555h165v-165h390v330h165v390H533v-165H427v165H120Zm60-60h105v-105H180v105Zm0-165h105v-105H180v105Zm0-165h105v-105H180v105Zm165 165h105v-105H345v105Zm0-165h105v-105H345v105Zm0-165h105v-105H345v105Zm165 330h105v-105H510v105Zm0-165h105v-105H510v105Zm0-165h105v-105H510v105Zm165 495h105v-105H675v105Zm0-165h105v-105H675v105Z","archive":"m480-270 156-156-40-40-86 86v-201h-60v201l-86-86-40 40 156 156ZM180-674v494h600v-494H180Zm0 554q-24.75 0-42.37-17.63Q120-155.25 120-180v-529q0-9.88 3-19.06 3-9.18 9-16.94l52-71q8-11 20.94-17.5Q217.88-840 232-840h495q14.12 0 27.06 6.5T775-816l53 71q6 7.76 9 16.94 3 9.18 3 19.06v529q0 24.75-17.62 42.37Q804.75-120 780-120H180Zm17-614h565l-36.41-46H233l-36 46Zm283 307Z","beach_access":"M794-128 531-391l46-46 263 263-46 46Zm-570-46q-53-58-78.5-128.5T120-446q0-78 29-152t88-133q59-59 133.5-88T523-848q73 0 143.5 25.5T794-744L224-174Zm3-89 69-70q-16-22-32-47.5t-29.5-54Q221-463 212-493.5T200-556q-27 74-18.5 151T227-263Zm117-115 246-248q-46-36-93.5-56.5t-90.5-27q-43-6.5-76.5 0T278-685q-18 18-23 51.5t2.5 75q7.5 41.5 29 88T344-378Zm291-294 72-69q-66-42-143.5-49T412-768q30 3 59.5 12t58 21.5q28.5 12.5 55 28.5t50.5 34Z","bedtime":"M484-80q-84 0-157.5-32t-128-86.5Q144-253 112-326.5T80-484q0-146 93-257.5T410-880q-18 98 11 192.63 29 94.64 100 165.74 71 71.1 165.5 100.14Q781-392.45 880-410.47q-26 144.2-138 237.34Q630-80 484-80Zm0-60q100 0 182-57t132-145q-90-8-173-41.5T478.5-480Q415-543 382-625.5T341-797q-88 48-144.5 130.5T140-484q0 143.33 100.33 243.67Q340.67-140 484-140Zm-6-340Z","calendar_month":"M180-80q-24 0-42-18t-18-42v-620q0-24 18-42t42-18h65v-60h65v60h340v-60h65v60h65q24 0 42 18t18 42v620q0 24-18 42t-42 18H180Zm0-60h600v-430H180v430Zm0-490h600v-130H180v130Zm0 0v-130 130Zm300 230q-17 0-28.5-11.5T440-440q0-17 11.5-28.5T480-480q17 0 28.5 11.5T520-440q0 17-11.5 28.5T480-400Zm-160 0q-17 0-28.5-11.5T280-440q0-17 11.5-28.5T320-480q17 0 28.5 11.5T360-440q0 17-11.5 28.5T320-400Zm320 0q-17 0-28.5-11.5T600-440q0-17 11.5-28.5T640-480q17 0 28.5 11.5T680-440q0 17-11.5 28.5T640-400ZM480-240q-17 0-28.5-11.5T440-280q0-17 11.5-28.5T480-320q17 0 28.5 11.5T520-280q0 17-11.5 28.5T480-240Zm-160 0q-17 0-28.5-11.5T280-280q0-17 11.5-28.5T320-320q17 0 28.5 11.5T360-280q0 17-11.5 28.5T320-240Zm320 0q-17 0-28.5-11.5T600-280q0-17 11.5-28.5T640-320q17 0 28.5 11.5T680-280q0 17-11.5 28.5T640-240Z","calendar_today":"M180-80q-24 0-42-18t-18-42v-620q0-24 18-42t42-18h65v-60h65v60h340v-60h65v60h65q24 0 42 18t18 42v620q0 24-18 42t-42 18H180Zm0-60h600v-430H180v430Zm0-490h600v-130H180v130Zm0 0v-130 130Z","calendar_view_month":"M140-160q-24 0-42-18t-18-42v-520q0-24 18-42t42-18h680q24 0 42 18t18 42v520q0 24-18 42t-42 18H140Zm0-350h186v-230H140v230Zm246 0h188v-230H386v230Zm248 0h186v-230H634v230ZM326-220v-230H140v230h186Zm60 0h188v-230H386v230Zm248 0h186v-230H634v230Z","celebration":"m80-80 186-520 337 333L80-80Zm101-101 314-112-203-204-111 316Zm376-264-34-34 240-240q32-32 81-32.5t81 31.5l17 17-34 34-19-19q-19-19-44-19.5T800-688L557-445ZM398-600l-34-34 30-30q23-23 21.5-52.5T394-766l-28-28 34-34 26 26q35 35 34.5 87.5T425-627l-27 27Zm81 77-34-34 152-152q19-19 18.5-48.5T596-806l-61-61 34-34 63 63q31 32 32 80.5T633-677L479-523Zm158 159-34-34 47-47q35-35 84-36t84 34l51 51-34 34-52-52q-23-23-48-23t-48 23l-50 50ZM181-181Z","check":"M378-246 154-470l43-43 181 181 384-384 43 43-427 427Z","chevron_left":"M561-240 320-481l241-241 43 43-198 198 198 198-43 43Z","chevron_right":"M530-481 332-679l43-43 241 241-241 241-43-43 198-198Z","close":"m249-207-42-42 231-231-231-231 42-42 231 231 231-231 42 42-231 231 231 231-42 42-231-231-231 231Z","content_copy":"M300-200q-24 0-42-18t-18-42v-560q0-24 18-42t42-18h440q24 0 42 18t18 42v560q0 24-18 42t-42 18H300Zm0-60h440v-560H300v560ZM180-80q-24 0-42-18t-18-42v-620h60v620h500v60H180Zm120-180v-560 560Z","delete":"M261-120q-24.75 0-42.37-17.63Q201-155.25 201-180v-570h-41v-60h188v-30h264v30h188v60h-41v570q0 24-18 42t-42 18H261Zm438-630H261v570h438v-570ZM367-266h60v-399h-60v399Zm166 0h60v-399h-60v399ZM261-750v570-570Z","delete_sweep":"M600-230v-60h145v60H600Zm0-368v-60h280v60H600Zm0 184v-60h235v60H600ZM125-675H80v-60h170v-45h135v45h170v60h-45v415q0 24-18 42t-42 18H185q-24 0-42-18t-18-42v-415Zm60 0v415h265v-415H185Zm0 0v415-415Z","error":"M479.98-280q14.02 0 23.52-9.48t9.5-23.5q0-14.02-9.48-23.52t-23.5-9.5q-14.02 0-23.52 9.48t-9.5 23.5q0 14.02 9.48 23.52t23.5 9.5ZM453-433h60v-253h-60v253Zm27.27 353q-82.74 0-155.5-31.5Q252-143 197.5-197.5t-86-127.34Q80-397.68 80-480.5t31.5-155.66Q143-709 197.5-763t127.34-85.5Q397.68-880 480.5-880t155.66 31.5Q709-817 763-763t85.5 127Q880-563 880-480.27q0 82.74-31.5 155.5Q817-252 763-197.68q-54 54.31-127 86Q563-80 480.27-80Zm.23-60Q622-140 721-239.5t99-241Q820-622 721.19-721T480-820q-141 0-240.5 98.81T140-480q0 141 99.5 240.5t241 99.5Zm-.5-340Z","event_busy":"m381-218-43-43 100-99-100-99 43-43 99 100 99-100 43 43-100 99 100 99-43 43-99-100-99 100ZM180-80q-24 0-42-18t-18-42v-620q0-24 18-42t42-18h65v-60h65v60h340v-60h65v60h65q24 0 42 18t18 42v620q0 24-18 42t-42 18H180Zm0-60h600v-430H180v430Zm0-490h600v-130H180v130Zm0 0v-130 130Z","event_note":"M180-80q-24 0-42-18t-18-42v-620q0-24 18-42t42-18h65v-60h65v60h340v-60h65v60h65q24 0 42 18t18 42v620q0 24-18 42t-42 18H180Zm0-60h600v-430H180v430Zm0-490h600v-130H180v130Zm0 0v-130 130Zm100 210v-60h400v60H280Zm0 180v-60h279v60H280Z","flight_takeoff":"M120-120v-60h720v60H120Zm66-210L43-568l79-22 117 98 165-45-214-285 98-26 310 260 184-50q29-7 53.5 8t32.5 44q8 28-5.5 52.5T822-501L186-330Z","folder":"M140-160q-24 0-42-18.5T80-220v-520q0-23 18-41.5t42-18.5h281l60 60h339q23 0 41.5 18.5T880-680v460q0 23-18.5 41.5T820-160H140Zm0-60h680v-460H456l-60-60H140v520Zm0 0v-520 520Z","folder_open":"M140-160q-23 0-41.5-18.5T80-220v-520q0-23 18.5-41.5T140-800h281l60 60h339q23 0 41.5 18.5T880-680H455l-60-60H140v520l102-400h698L833-206q-6 24-22 35t-41 11H140Zm63-60h572l84-340H287l-84 340Zm0 0 84-340-84 340Zm-63-460v-60 60Z","help":"M484-247q16 0 27-11t11-27q0-16-11-27t-27-11q-16 0-27 11t-11 27q0 16 11 27t27 11Zm-35-146h59q0-26 6.5-47.5T555-490q31-26 44-51t13-55q0-53-34.5-85T486-713q-49 0-86.5 24.5T345-621l53 20q11-28 33-43.5t52-15.5q34 0 55 18.5t21 47.5q0 22-13 41.5T508-512q-30 26-44.5 51.5T449-393Zm31 313q-82 0-155-31.5t-127.5-86Q143-252 111.5-325T80-480q0-83 31.5-156t86-127Q252-817 325-848.5T480-880q83 0 156 31.5T763-763q54 54 85.5 127T880-480q0 82-31.5 155T763-197.5q-54 54.5-127 86T480-80Zm0-60q142 0 241-99.5T820-480q0-142-99-241t-241-99q-141 0-240.5 99T140-480q0 141 99.5 240.5T480-140Zm0-340Z","home_work":"M697-623h60v-60h-60v60Zm0 171h60v-60h-60v60Zm0 170h60v-60h-60v60Zm-56 162v-60h219v-600H465v112l-60-42v-130h515v720H641Zm-601 0v-390l271-194 270 194v390H364v-201H258v201H40Zm60-60h98v-201h226v201h97v-299L311-630 100-478.58V-180Zm541-365ZM424-180v-201H198v201-201h226v201Z","info":"M453-280h60v-240h-60v240Zm26.98-314q14.02 0 23.52-9.2T513-626q0-14.45-9.48-24.22-9.48-9.78-23.5-9.78t-23.52 9.78Q447-640.45 447-626q0 13.6 9.48 22.8 9.48 9.2 23.5 9.2Zm.29 514q-82.74 0-155.5-31.5Q252-143 197.5-197.5t-86-127.34Q80-397.68 80-480.5t31.5-155.66Q143-709 197.5-763t127.34-85.5Q397.68-880 480.5-880t155.66 31.5Q709-817 763-763t85.5 127Q880-563 880-480.27q0 82.74-31.5 155.5Q817-252 763-197.68q-54 54.31-127 86Q563-80 480.27-80Zm.23-60Q622-140 721-239.5t99-241Q820-622 721.19-721T480-820q-141 0-240.5 98.81T140-480q0 141 99.5 240.5t241 99.5Zm-.5-340Z","lock":"M220-80q-24.75 0-42.37-17.63Q160-115.25 160-140v-434q0-24.75 17.63-42.38Q195.25-634 220-634h70v-96q0-78.85 55.61-134.42Q401.21-920 480.11-920q78.89 0 134.39 55.58Q670-808.85 670-730v96h70q24.75 0 42.38 17.62Q800-598.75 800-574v434q0 24.75-17.62 42.37Q764.75-80 740-80H220Zm0-60h520v-434H220v434Zm260.17-140q31.83 0 54.33-22.03T557-355q0-30-22.67-54.5t-54.5-24.5q-31.83 0-54.33 24.5t-22.5 55q0 30.5 22.67 52.5t54.5 22ZM350-634h260v-96q0-54.17-37.88-92.08-37.88-37.92-92-37.92T388-822.08q-38 37.91-38 92.08v96ZM220-140v-434 434Z","medical_services":"M140-80q-24 0-42-18t-18-42v-520q0-24 18-42t42-18h180v-100q0-24 18-42t42-18h200q24 0 42 18t18 42v100h180q24 0 42 18t18 42v520q0 24-18 42t-42 18H140Zm0-60h680v-520H140v520Zm240-580h200v-100H380v100ZM140-140v-520 520Zm310-230v120h60v-120h120v-60H510v-120h-60v120H330v60h120Z","more_time":"M440-120q-75 0-140.5-28.5t-114-77q-48.5-48.5-77-114T80-480q0-75 28.5-140.5t77.5-114q49-48.5 114.5-77T441-840q26 0 52.5 4t54.5 12v64q-26-10-53-15t-54-5q-125 0-213 87.5T140-480q0 125 87.5 212.5T440-180q125 0 212.5-87.5T740-480q0-15-1.5-31.5T733-549h61q3 17 4.5 34.5T800-480q0 75-28.5 140.5t-77 114q-48.5 48.5-114 77T440-120Zm116-193L404-465v-215h60v191l134 134-42 42Zm178-296v-125H608v-60h126v-126h60v126h126v60H794v125h-60Z","more_vert":"M479.86-160Q460-160 446-174.14t-14-34Q432-228 446.14-242t34-14Q500-256 514-241.86t14 34Q528-188 513.86-174t-34 14Zm0-272Q460-432 446-446.14t-14-34Q432-500 446.14-514t34-14Q500-528 514-513.86t14 34Q528-460 513.86-446t-34 14Zm0-272Q460-704 446-718.14t-14-34Q432-772 446.14-786t34-14Q500-800 514-785.86t14 34Q528-732 513.86-718t-34 14Z","save":"M840-683v503q0 24-18 42t-42 18H180q-24 0-42-18t-18-42v-600q0-24 18-42t42-18h503l157 157Zm-60 27L656-780H180v600h600v-476ZM479.76-245q43.24 0 73.74-30.26 30.5-30.27 30.5-73.5 0-43.24-30.26-73.74-30.27-30.5-73.5-30.5-43.24 0-73.74 30.26-30.5 30.27-30.5 73.5 0 43.24 30.26 73.74 30.27 30.5 73.5 30.5ZM233-584h358v-143H233v143Zm-53-72v476-600 124Z","schedule":"m627-287 45-45-159-160v-201h-60v225l174 181ZM480-80q-82 0-155-31.5t-127.5-86Q143-252 111.5-325T80-480q0-82 31.5-155t86-127.5Q252-817 325-848.5T480-880q82 0 155 31.5t127.5 86Q817-708 848.5-635T880-480q0 82-31.5 155t-86 127.5Q708-143 635-111.5T480-80Zm0-400Zm0 340q140 0 240-100t100-240q0-140-100-240T480-820q-140 0-240 100T140-480q0 140 100 240t240 100Z","settings":"m388-80-20-126q-19-7-40-19t-37-25l-118 54-93-164 108-79q-2-9-2.5-20.5T185-480q0-9 .5-20.5T188-521L80-600l93-164 118 54q16-13 37-25t40-18l20-127h184l20 126q19 7 40.5 18.5T669-710l118-54 93 164-108 77q2 10 2.5 21.5t.5 21.5q0 10-.5 21t-2.5 21l108 78-93 164-118-54q-16 13-36.5 25.5T592-206L572-80H388Zm48-60h88l14-112q33-8 62.5-25t53.5-41l106 46 40-72-94-69q4-17 6.5-33.5T715-480q0-17-2-33.5t-7-33.5l94-69-40-72-106 46q-23-26-52-43.5T538-708l-14-112h-88l-14 112q-34 7-63.5 24T306-642l-106-46-40 72 94 69q-4 17-6.5 33.5T245-480q0 17 2.5 33.5T254-413l-94 69 40 72 106-46q24 24 53.5 41t62.5 25l14 112Zm44-210q54 0 92-38t38-92q0-54-38-92t-92-38q-54 0-92 38t-38 92q0 54 38 92t92 38Zm0-130Z","sticky_note_2":"M180-180h400v-200h200v-400H180v600Zm0 60q-24.75 0-42.37-17.63Q120-155.25 120-180v-600q0-24.75 17.63-42.38Q155.25-840 180-840h600q24.75 0 42.38 17.62Q840-804.75 840-780v420L600-120H180Zm120-300v-60h170v60H300Zm0-160v-60h360v60H300ZM180-180v-600 600Z","sync":"M167-160v-60h130l-15-12q-64-51-93-111t-29-134q0-106 62.5-190.5T387-784v62q-75 29-121 96.5T220-477q0 63 23.5 109.5T307-287l30 21v-124h60v230H167Zm407-15v-63q76-29 121-96.5T740-483q0-48-23.5-97.5T655-668l-29-26v124h-60v-230h230v60H665l15 14q60 56 90 120t30 123q0 106-62 191T574-175Z","table_view":"M300-80q-24 0-42-18t-18-42v-520q0-24 18-42t42-18h520q24 0 42 18t18 42v520q0 24-18 42t-42 18H300Zm0-60h230v-147H300v147Zm290 0h230v-147H590v147ZM80-244v-576q0-24 18-42t42-18h576v60H140v576H80Zm220-103h230v-148H300v148Zm290 0h230v-148H590v148ZM300-555h520v-105H300v105Z","touch_app":"M445-80q-29 0-56-12t-45-35L127-403l21-23q14-15 34.5-18.5T221-438l99 53v-365q0-12.75 8.68-21.38 8.67-8.62 21.5-8.62 12.82 0 21.32 8.62 8.5 8.63 8.5 21.38v465l-144-77 156 198q10 12 23.76 18 13.76 6 29.24 6h205q38 0 64-26t26-64v-170q0-25.5-17.25-42.75T680-460H460v-60h219.65q50.14 0 85.25 35 35.1 35 35.1 85v170q0 63-43.5 106.5T650-80H445ZM203-665q-11.07-18.75-17.04-40.49-5.96-21.74-5.96-44.76 0-70.75 49.73-120.25Q279.45-920 350-920t120.27 49.74Q520-820.52 520-749.96q0 22.96-5.96 44.62Q508.07-683.68 497-665l-52-30q7-12 11-26t4-29.48Q460-796 427.88-828q-32.12-32-78-32T272-827.92q-32 32.09-32 77.92 0 15 4 29t11 26l-52 30Zm285 335Z","unarchive":"M480-581 324-425l40 40 86-86v201h60v-201l86 86 40-40-156-156Zm-300-93v494h600v-494H180Zm0 554q-24.75 0-42.37-17.63Q120-155.25 120-180v-529q0-9.88 3-19.06 3-9.18 9-16.94l52-71q8-11 20.94-17.5Q217.88-840 232-840h495q14.12 0 27.06 6.5T775-816l53 71q6 7.76 9 16.94 3 9.18 3 19.06v529q0 24.75-17.62 42.37Q804.75-120 780-120H180Zm17-614h565l-36.41-46H233l-36 46Zm283 307Z","upload":"M450-313v-371L330-564l-43-43 193-193 193 193-43 43-120-120v371h-60ZM220-160q-24 0-42-18t-18-42v-143h60v143h520v-143h60v143q0 24-18 42t-42 18H220Z","download":"M480-313 287-506l43-43 120 120v-371h60v371l120-120 43 43-193 193ZM220-160q-24 0-42-18t-18-42v-143h60v143h520v-143h60v143q0 24-18 42t-42 18H220Z","view_week":"M140-220h187v-520H140v520Zm247 0h186v-520H387v520Zm246 0h187v-520H633v520Zm-493 60q-24 0-42-18t-18-42v-520q0-24 18-42t42-18h680q24 0 42 18t18 42v520q0 24-18 42t-42 18H140Z","warning":"m40-120 440-760 440 760H40Zm104-60h672L480-760 144-180Zm340.18-57q12.82 0 21.32-8.68 8.5-8.67 8.5-21.5 0-12.82-8.68-21.32-8.67-8.5-21.5-8.5-12.82 0-21.32 8.68-8.5 8.67-8.5 21.5 0 12.82 8.68 21.32 8.67 8.5 21.5 8.5ZM454-348h60v-224h-60v224Zm26-122Z","wb_sunny":"M450-810v-110h60v110h-60Zm0 770v-110h60v110h-60Zm360-410v-60h110v60H810Zm-770 0v-60h110v60H40Zm702-250-43-43 66-66 43 43-66 66ZM195-151l-43-43 66-66 43 43-66 66Zm570 0-66-66 43-43 66 66-43 43ZM218-700l-66-66 43-43 66 66-43 43Zm261.82 445Q386-255 320.5-320.68 255-386.35 255-480.18q0-93.82 65.68-159.32 65.67-65.5 159.5-65.5 93.82 0 159.32 65.68 65.5 65.67 65.5 159.5 0 93.82-65.68 159.32-65.67 65.5-159.5 65.5Zm.11-60Q549-315 597-362.93q48-47.94 48-117Q645-549 597.07-597q-47.94-48-117-48Q411-645 363-597.07q-48 47.94-48 117Q315-411 362.93-363q47.94 48 117 48Zm.07-165Z","weekend":"M152-692q0-45 31.5-76.5T260-800h440q45 0 76.5 31.5T808-692v83q48-5 80 21t32 75v245q0 45-31.5 76.5T812-160H148q-45 0-76.5-31.5T40-268v-245q0-49 32.5-75t79.5-21v-83Zm60 0v112q14 14 22 27.5t8 39.5v124h476v-124q0-26 8-39.5t22-27.5v-112q0-21-13.5-34.5T700-740H260q-21 0-34.5 13.5T212-692Zm566 363H182v-184q0-10-2.5-17.5t-8-13q-5.5-5.5-13-8t-17.1-2.5q-20.4 0-30.9 10.5T100-513v245.16q0 20.84 13.5 34.34Q127-220 148-220h664q21 0 34.5-13.5t13.5-34.34V-513q0-20-10.5-30.5T818.6-554q-9.6 0-17.1 2.5-7.5 2.5-12.68 8-5.17 5.5-8 13Q778-523 778-513v184Zm-298 0Zm0 109Zm0-169Z","work":"M140-120q-24 0-42-18t-18-42v-480q0-24 18-42t42-18h180v-100q0-24 18-42t42-18h200q24 0 42 18t18 42v100h180q24 0 42 18t18 42v480q0 24-18 42t-42 18H140Zm0-60h680v-480H140v480Zm240-540h200v-100H380v100ZM140-180v-480 480Z","history":"M477-120q-149 0-253-105.5T120-481h60q0 125 86 213t211 88q127 0 215-89t88-216q0-124-89-209.5T477-780q-68 0-127.5 31T246-667h105v60H142v-208h60v106q52-61 123.5-96T477-840q75 0 141 28t115.5 76.5Q783-687 811.5-622T840-482q0 75-28.5 141t-78 115Q684-177 618-148.5T477-120Zm128-197L451-469v-214h60v189l137 134-43 43Z","description":"M319-250h322v-60H319v60Zm0-170h322v-60H319v60ZM220-80q-24 0-42-18t-18-42v-680q0-24 18-42t42-18h361l219 219v521q0 24-18 42t-42 18H220Zm331-554v-186H220v680h520v-494H551ZM220-820v186-186 680-680Z","link_off":"m750-291-49-49q51-10 85-48t34-89q0-58-41-99t-99-41H525v-60h155q83 0 141.5 58.5T880-477q0 62-36 112t-94 74ZM594-447l-60-60h101v60h-41ZM814-56 63-807l43-43L857-99l-43 43ZM450-280H280q-83 0-141.5-58.5T80-480q0-72 44.5-127T238-676l56 56h-14q-58 0-99 41t-41 99q0 58 41 99t99 41h170v60ZM325-450v-60h79l60 60H325Z","shield":"M480-81q-140-35-230-162.5T160-523v-238l320-120 320 120v238q0 152-90 279.5T480-81Zm0-62q115-38 187.5-143.5T740-523v-196l-260-98-260 98v196q0 131 72.5 236.5T480-143Zm0-337Z","palette":"M480-80q-82 0-155-31.5t-127.5-86Q143-252 111.5-325T80-480q0-85 32-158t87.5-127q55.5-54 130-84.5T489-880q79 0 150 26.5T763.5-780q53.5 47 85 111.5T880-527q0 108-63 170.5T650-294h-75q-18 0-31 14t-13 31q0 27 14.5 46t14.5 44q0 38-21 58.5T480-80Zm0-400Zm-233 26q20 0 35-15t15-35q0-20-15-35t-35-15q-20 0-35 15t-15 35q0 20 15 35t35 15Zm126-170q20 0 35-15t15-35q0-20-15-35t-35-15q-20 0-35 15t-15 35q0 20 15 35t35 15Zm214 0q20 0 35-15t15-35q0-20-15-35t-35-15q-20 0-35 15t-15 35q0 20 15 35t35 15Zm131 170q20 0 35-15t15-35q0-20-15-35t-35-15q-20 0-35 15t-15 35q0 20 15 35t35 15ZM480-140q11 0 15.5-4.5T500-159q0-14-14.5-26T471-238q0-46 30-81t76-35h73q76 0 123-44.5T820-527q0-132-100-212.5T489-820q-146 0-247.5 98.5T140-480q0 141 99.5 240.5T480-140Z","edit":"M180-180h44l472-471-44-44-472 471v44Zm-60 60v-128l575-574q8-8 19-12.5t23-4.5q11 0 22 4.5t20 12.5l44 44q9 9 13 20t4 22q0 11-4.5 22.5T823-694L248-120H120Zm659-617-41-41 41 41Zm-105 64-22-22 44 44-22-22Z","timer":"M360-860v-60h240v60H360Zm90 447h60v-230h-60v230Zm30 332q-74 0-139.5-28.5T226-187q-49-49-77.5-114.5T120-441q0-74 28.5-139.5T226-695q49-49 114.5-77.5T480-801q67 0 126 22.5T711-716l51-51 42 42-51 51q36 40 61.5 97T840-441q0 74-28.5 139.5T734-187q-49 49-114.5 77.5T480-81Zm0-60q125 0 212.5-87.5T780-441q0-125-87.5-212.5T480-741q-125 0-212.5 87.5T180-441q0 125 87.5 212.5T480-141Zm0-299Z","notes":"M120-240v-60h480v60H120Zm0-210v-60h720v60H120Zm0-210v-60h720v60H120Z"};
+const ICONS = {"swap_horiz":"M280-160 80-360l200-200 56 57-103 103h287v80H233l103 103-56 57Zm400-240-56-57 103-103H440v-80h287L624-743l56-57 200 200-200 200Z","drag_indicator":"M300 -720a60 60 0 1 0 120 0a60 60 0 1 0 -120 0ZM300 -480a60 60 0 1 0 120 0a60 60 0 1 0 -120 0ZM300 -240a60 60 0 1 0 120 0a60 60 0 1 0 -120 0ZM540 -720a60 60 0 1 0 120 0a60 60 0 1 0 -120 0ZM540 -480a60 60 0 1 0 120 0a60 60 0 1 0 -120 0ZM540 -240a60 60 0 1 0 120 0a60 60 0 1 0 -120 0Z","add":"M450-450H200v-60h250v-250h60v250h250v60H510v250h-60v-250Z","apartment":"M120-120v-555h165v-165h390v330h165v390H533v-165H427v165H120Zm60-60h105v-105H180v105Zm0-165h105v-105H180v105Zm0-165h105v-105H180v105Zm165 165h105v-105H345v105Zm0-165h105v-105H345v105Zm0-165h105v-105H345v105Zm165 330h105v-105H510v105Zm0-165h105v-105H510v105Zm0-165h105v-105H510v105Zm165 495h105v-105H675v105Zm0-165h105v-105H675v105Z","archive":"m480-270 156-156-40-40-86 86v-201h-60v201l-86-86-40 40 156 156ZM180-674v494h600v-494H180Zm0 554q-24.75 0-42.37-17.63Q120-155.25 120-180v-529q0-9.88 3-19.06 3-9.18 9-16.94l52-71q8-11 20.94-17.5Q217.88-840 232-840h495q14.12 0 27.06 6.5T775-816l53 71q6 7.76 9 16.94 3 9.18 3 19.06v529q0 24.75-17.62 42.37Q804.75-120 780-120H180Zm17-614h565l-36.41-46H233l-36 46Zm283 307Z","beach_access":"M794-128 531-391l46-46 263 263-46 46Zm-570-46q-53-58-78.5-128.5T120-446q0-78 29-152t88-133q59-59 133.5-88T523-848q73 0 143.5 25.5T794-744L224-174Zm3-89 69-70q-16-22-32-47.5t-29.5-54Q221-463 212-493.5T200-556q-27 74-18.5 151T227-263Zm117-115 246-248q-46-36-93.5-56.5t-90.5-27q-43-6.5-76.5 0T278-685q-18 18-23 51.5t2.5 75q7.5 41.5 29 88T344-378Zm291-294 72-69q-66-42-143.5-49T412-768q30 3 59.5 12t58 21.5q28.5 12.5 55 28.5t50.5 34Z","bedtime":"M484-80q-84 0-157.5-32t-128-86.5Q144-253 112-326.5T80-484q0-146 93-257.5T410-880q-18 98 11 192.63 29 94.64 100 165.74 71 71.1 165.5 100.14Q781-392.45 880-410.47q-26 144.2-138 237.34Q630-80 484-80Zm0-60q100 0 182-57t132-145q-90-8-173-41.5T478.5-480Q415-543 382-625.5T341-797q-88 48-144.5 130.5T140-484q0 143.33 100.33 243.67Q340.67-140 484-140Zm-6-340Z","calendar_month":"M180-80q-24 0-42-18t-18-42v-620q0-24 18-42t42-18h65v-60h65v60h340v-60h65v60h65q24 0 42 18t18 42v620q0 24-18 42t-42 18H180Zm0-60h600v-430H180v430Zm0-490h600v-130H180v130Zm0 0v-130 130Zm300 230q-17 0-28.5-11.5T440-440q0-17 11.5-28.5T480-480q17 0 28.5 11.5T520-440q0 17-11.5 28.5T480-400Zm-160 0q-17 0-28.5-11.5T280-440q0-17 11.5-28.5T320-480q17 0 28.5 11.5T360-440q0 17-11.5 28.5T320-400Zm320 0q-17 0-28.5-11.5T600-440q0-17 11.5-28.5T640-480q17 0 28.5 11.5T680-440q0 17-11.5 28.5T640-400ZM480-240q-17 0-28.5-11.5T440-280q0-17 11.5-28.5T480-320q17 0 28.5 11.5T520-280q0 17-11.5 28.5T480-240Zm-160 0q-17 0-28.5-11.5T280-280q0-17 11.5-28.5T320-320q17 0 28.5 11.5T360-280q0 17-11.5 28.5T320-240Zm320 0q-17 0-28.5-11.5T600-280q0-17 11.5-28.5T640-320q17 0 28.5 11.5T680-280q0 17-11.5 28.5T640-240Z","calendar_today":"M180-80q-24 0-42-18t-18-42v-620q0-24 18-42t42-18h65v-60h65v60h340v-60h65v60h65q24 0 42 18t18 42v620q0 24-18 42t-42 18H180Zm0-60h600v-430H180v430Zm0-490h600v-130H180v130Zm0 0v-130 130Z","calendar_view_month":"M140-160q-24 0-42-18t-18-42v-520q0-24 18-42t42-18h680q24 0 42 18t18 42v520q0 24-18 42t-42 18H140Zm0-350h186v-230H140v230Zm246 0h188v-230H386v230Zm248 0h186v-230H634v230ZM326-220v-230H140v230h186Zm60 0h188v-230H386v230Zm248 0h186v-230H634v230Z","celebration":"m80-80 186-520 337 333L80-80Zm101-101 314-112-203-204-111 316Zm376-264-34-34 240-240q32-32 81-32.5t81 31.5l17 17-34 34-19-19q-19-19-44-19.5T800-688L557-445ZM398-600l-34-34 30-30q23-23 21.5-52.5T394-766l-28-28 34-34 26 26q35 35 34.5 87.5T425-627l-27 27Zm81 77-34-34 152-152q19-19 18.5-48.5T596-806l-61-61 34-34 63 63q31 32 32 80.5T633-677L479-523Zm158 159-34-34 47-47q35-35 84-36t84 34l51 51-34 34-52-52q-23-23-48-23t-48 23l-50 50ZM181-181Z","check":"M378-246 154-470l43-43 181 181 384-384 43 43-427 427Z","chevron_left":"M561-240 320-481l241-241 43 43-198 198 198 198-43 43Z","chevron_right":"M530-481 332-679l43-43 241 241-241 241-43-43 198-198Z","close":"m249-207-42-42 231-231-231-231 42-42 231 231 231-231 42 42-231 231 231 231-42 42-231-231-231 231Z","content_copy":"M300-200q-24 0-42-18t-18-42v-560q0-24 18-42t42-18h440q24 0 42 18t18 42v560q0 24-18 42t-42 18H300Zm0-60h440v-560H300v560ZM180-80q-24 0-42-18t-18-42v-620h60v620h500v60H180Zm120-180v-560 560Z","delete":"M261-120q-24.75 0-42.37-17.63Q201-155.25 201-180v-570h-41v-60h188v-30h264v30h188v60h-41v570q0 24-18 42t-42 18H261Zm438-630H261v570h438v-570ZM367-266h60v-399h-60v399Zm166 0h60v-399h-60v399ZM261-750v570-570Z","delete_sweep":"M600-230v-60h145v60H600Zm0-368v-60h280v60H600Zm0 184v-60h235v60H600ZM125-675H80v-60h170v-45h135v45h170v60h-45v415q0 24-18 42t-42 18H185q-24 0-42-18t-18-42v-415Zm60 0v415h265v-415H185Zm0 0v415-415Z","error":"M479.98-280q14.02 0 23.52-9.48t9.5-23.5q0-14.02-9.48-23.52t-23.5-9.5q-14.02 0-23.52 9.48t-9.5 23.5q0 14.02 9.48 23.52t23.5 9.5ZM453-433h60v-253h-60v253Zm27.27 353q-82.74 0-155.5-31.5Q252-143 197.5-197.5t-86-127.34Q80-397.68 80-480.5t31.5-155.66Q143-709 197.5-763t127.34-85.5Q397.68-880 480.5-880t155.66 31.5Q709-817 763-763t85.5 127Q880-563 880-480.27q0 82.74-31.5 155.5Q817-252 763-197.68q-54 54.31-127 86Q563-80 480.27-80Zm.23-60Q622-140 721-239.5t99-241Q820-622 721.19-721T480-820q-141 0-240.5 98.81T140-480q0 141 99.5 240.5t241 99.5Zm-.5-340Z","event_busy":"m381-218-43-43 100-99-100-99 43-43 99 100 99-100 43 43-100 99 100 99-43 43-99-100-99 100ZM180-80q-24 0-42-18t-18-42v-620q0-24 18-42t42-18h65v-60h65v60h340v-60h65v60h65q24 0 42 18t18 42v620q0 24-18 42t-42 18H180Zm0-60h600v-430H180v430Zm0-490h600v-130H180v130Zm0 0v-130 130Z","event_note":"M180-80q-24 0-42-18t-18-42v-620q0-24 18-42t42-18h65v-60h65v60h340v-60h65v60h65q24 0 42 18t18 42v620q0 24-18 42t-42 18H180Zm0-60h600v-430H180v430Zm0-490h600v-130H180v130Zm0 0v-130 130Zm100 210v-60h400v60H280Zm0 180v-60h279v60H280Z","flight_takeoff":"M120-120v-60h720v60H120Zm66-210L43-568l79-22 117 98 165-45-214-285 98-26 310 260 184-50q29-7 53.5 8t32.5 44q8 28-5.5 52.5T822-501L186-330Z","folder":"M140-160q-24 0-42-18.5T80-220v-520q0-23 18-41.5t42-18.5h281l60 60h339q23 0 41.5 18.5T880-680v460q0 23-18.5 41.5T820-160H140Zm0-60h680v-460H456l-60-60H140v520Zm0 0v-520 520Z","folder_open":"M140-160q-23 0-41.5-18.5T80-220v-520q0-23 18.5-41.5T140-800h281l60 60h339q23 0 41.5 18.5T880-680H455l-60-60H140v520l102-400h698L833-206q-6 24-22 35t-41 11H140Zm63-60h572l84-340H287l-84 340Zm0 0 84-340-84 340Zm-63-460v-60 60Z","help":"M484-247q16 0 27-11t11-27q0-16-11-27t-27-11q-16 0-27 11t-11 27q0 16 11 27t27 11Zm-35-146h59q0-26 6.5-47.5T555-490q31-26 44-51t13-55q0-53-34.5-85T486-713q-49 0-86.5 24.5T345-621l53 20q11-28 33-43.5t52-15.5q34 0 55 18.5t21 47.5q0 22-13 41.5T508-512q-30 26-44.5 51.5T449-393Zm31 313q-82 0-155-31.5t-127.5-86Q143-252 111.5-325T80-480q0-83 31.5-156t86-127Q252-817 325-848.5T480-880q83 0 156 31.5T763-763q54 54 85.5 127T880-480q0 82-31.5 155T763-197.5q-54 54.5-127 86T480-80Zm0-60q142 0 241-99.5T820-480q0-142-99-241t-241-99q-141 0-240.5 99T140-480q0 141 99.5 240.5T480-140Zm0-340Z","home_work":"M697-623h60v-60h-60v60Zm0 171h60v-60h-60v60Zm0 170h60v-60h-60v60Zm-56 162v-60h219v-600H465v112l-60-42v-130h515v720H641Zm-601 0v-390l271-194 270 194v390H364v-201H258v201H40Zm60-60h98v-201h226v201h97v-299L311-630 100-478.58V-180Zm541-365ZM424-180v-201H198v201-201h226v201Z","info":"M453-280h60v-240h-60v240Zm26.98-314q14.02 0 23.52-9.2T513-626q0-14.45-9.48-24.22-9.48-9.78-23.5-9.78t-23.52 9.78Q447-640.45 447-626q0 13.6 9.48 22.8 9.48 9.2 23.5 9.2Zm.29 514q-82.74 0-155.5-31.5Q252-143 197.5-197.5t-86-127.34Q80-397.68 80-480.5t31.5-155.66Q143-709 197.5-763t127.34-85.5Q397.68-880 480.5-880t155.66 31.5Q709-817 763-763t85.5 127Q880-563 880-480.27q0 82.74-31.5 155.5Q817-252 763-197.68q-54 54.31-127 86Q563-80 480.27-80Zm.23-60Q622-140 721-239.5t99-241Q820-622 721.19-721T480-820q-141 0-240.5 98.81T140-480q0 141 99.5 240.5t241 99.5Zm-.5-340Z","lock":"M220-80q-24.75 0-42.37-17.63Q160-115.25 160-140v-434q0-24.75 17.63-42.38Q195.25-634 220-634h70v-96q0-78.85 55.61-134.42Q401.21-920 480.11-920q78.89 0 134.39 55.58Q670-808.85 670-730v96h70q24.75 0 42.38 17.62Q800-598.75 800-574v434q0 24.75-17.62 42.37Q764.75-80 740-80H220Zm0-60h520v-434H220v434Zm260.17-140q31.83 0 54.33-22.03T557-355q0-30-22.67-54.5t-54.5-24.5q-31.83 0-54.33 24.5t-22.5 55q0 30.5 22.67 52.5t54.5 22ZM350-634h260v-96q0-54.17-37.88-92.08-37.88-37.92-92-37.92T388-822.08q-38 37.91-38 92.08v96ZM220-140v-434 434Z","medical_services":"M140-80q-24 0-42-18t-18-42v-520q0-24 18-42t42-18h180v-100q0-24 18-42t42-18h200q24 0 42 18t18 42v100h180q24 0 42 18t18 42v520q0 24-18 42t-42 18H140Zm0-60h680v-520H140v520Zm240-580h200v-100H380v100ZM140-140v-520 520Zm310-230v120h60v-120h120v-60H510v-120h-60v120H330v60h120Z","more_time":"M440-120q-75 0-140.5-28.5t-114-77q-48.5-48.5-77-114T80-480q0-75 28.5-140.5t77.5-114q49-48.5 114.5-77T441-840q26 0 52.5 4t54.5 12v64q-26-10-53-15t-54-5q-125 0-213 87.5T140-480q0 125 87.5 212.5T440-180q125 0 212.5-87.5T740-480q0-15-1.5-31.5T733-549h61q3 17 4.5 34.5T800-480q0 75-28.5 140.5t-77 114q-48.5 48.5-114 77T440-120Zm116-193L404-465v-215h60v191l134 134-42 42Zm178-296v-125H608v-60h126v-126h60v126h126v60H794v125h-60Z","more_vert":"M479.86-160Q460-160 446-174.14t-14-34Q432-228 446.14-242t34-14Q500-256 514-241.86t14 34Q528-188 513.86-174t-34 14Zm0-272Q460-432 446-446.14t-14-34Q432-500 446.14-514t34-14Q500-528 514-513.86t14 34Q528-460 513.86-446t-34 14Zm0-272Q460-704 446-718.14t-14-34Q432-772 446.14-786t34-14Q500-800 514-785.86t14 34Q528-732 513.86-718t-34 14Z","save":"M840-683v503q0 24-18 42t-42 18H180q-24 0-42-18t-18-42v-600q0-24 18-42t42-18h503l157 157Zm-60 27L656-780H180v600h600v-476ZM479.76-245q43.24 0 73.74-30.26 30.5-30.27 30.5-73.5 0-43.24-30.26-73.74-30.27-30.5-73.5-30.5-43.24 0-73.74 30.26-30.5 30.27-30.5 73.5 0 43.24 30.26 73.74 30.27 30.5 73.5 30.5ZM233-584h358v-143H233v143Zm-53-72v476-600 124Z","schedule":"m627-287 45-45-159-160v-201h-60v225l174 181ZM480-80q-82 0-155-31.5t-127.5-86Q143-252 111.5-325T80-480q0-82 31.5-155t86-127.5Q252-817 325-848.5T480-880q82 0 155 31.5t127.5 86Q817-708 848.5-635T880-480q0 82-31.5 155t-86 127.5Q708-143 635-111.5T480-80Zm0-400Zm0 340q140 0 240-100t100-240q0-140-100-240T480-820q-140 0-240 100T140-480q0 140 100 240t240 100Z","settings":"m388-80-20-126q-19-7-40-19t-37-25l-118 54-93-164 108-79q-2-9-2.5-20.5T185-480q0-9 .5-20.5T188-521L80-600l93-164 118 54q16-13 37-25t40-18l20-127h184l20 126q19 7 40.5 18.5T669-710l118-54 93 164-108 77q2 10 2.5 21.5t.5 21.5q0 10-.5 21t-2.5 21l108 78-93 164-118-54q-16 13-36.5 25.5T592-206L572-80H388Zm48-60h88l14-112q33-8 62.5-25t53.5-41l106 46 40-72-94-69q4-17 6.5-33.5T715-480q0-17-2-33.5t-7-33.5l94-69-40-72-106 46q-23-26-52-43.5T538-708l-14-112h-88l-14 112q-34 7-63.5 24T306-642l-106-46-40 72 94 69q-4 17-6.5 33.5T245-480q0 17 2.5 33.5T254-413l-94 69 40 72 106-46q24 24 53.5 41t62.5 25l14 112Zm44-210q54 0 92-38t38-92q0-54-38-92t-92-38q-54 0-92 38t-38 92q0 54 38 92t92 38Zm0-130Z","sticky_note_2":"M180-180h400v-200h200v-400H180v600Zm0 60q-24.75 0-42.37-17.63Q120-155.25 120-180v-600q0-24.75 17.63-42.38Q155.25-840 180-840h600q24.75 0 42.38 17.62Q840-804.75 840-780v420L600-120H180Zm120-300v-60h170v60H300Zm0-160v-60h360v60H300ZM180-180v-600 600Z","sync":"M167-160v-60h130l-15-12q-64-51-93-111t-29-134q0-106 62.5-190.5T387-784v62q-75 29-121 96.5T220-477q0 63 23.5 109.5T307-287l30 21v-124h60v230H167Zm407-15v-63q76-29 121-96.5T740-483q0-48-23.5-97.5T655-668l-29-26v124h-60v-230h230v60H665l15 14q60 56 90 120t30 123q0 106-62 191T574-175Z","table_view":"M300-80q-24 0-42-18t-18-42v-520q0-24 18-42t42-18h520q24 0 42 18t18 42v520q0 24-18 42t-42 18H300Zm0-60h230v-147H300v147Zm290 0h230v-147H590v147ZM80-244v-576q0-24 18-42t42-18h576v60H140v576H80Zm220-103h230v-148H300v148Zm290 0h230v-148H590v148ZM300-555h520v-105H300v105Z","touch_app":"M445-80q-29 0-56-12t-45-35L127-403l21-23q14-15 34.5-18.5T221-438l99 53v-365q0-12.75 8.68-21.38 8.67-8.62 21.5-8.62 12.82 0 21.32 8.62 8.5 8.63 8.5 21.38v465l-144-77 156 198q10 12 23.76 18 13.76 6 29.24 6h205q38 0 64-26t26-64v-170q0-25.5-17.25-42.75T680-460H460v-60h219.65q50.14 0 85.25 35 35.1 35 35.1 85v170q0 63-43.5 106.5T650-80H445ZM203-665q-11.07-18.75-17.04-40.49-5.96-21.74-5.96-44.76 0-70.75 49.73-120.25Q279.45-920 350-920t120.27 49.74Q520-820.52 520-749.96q0 22.96-5.96 44.62Q508.07-683.68 497-665l-52-30q7-12 11-26t4-29.48Q460-796 427.88-828q-32.12-32-78-32T272-827.92q-32 32.09-32 77.92 0 15 4 29t11 26l-52 30Zm285 335Z","unarchive":"M480-581 324-425l40 40 86-86v201h60v-201l86 86 40-40-156-156Zm-300-93v494h600v-494H180Zm0 554q-24.75 0-42.37-17.63Q120-155.25 120-180v-529q0-9.88 3-19.06 3-9.18 9-16.94l52-71q8-11 20.94-17.5Q217.88-840 232-840h495q14.12 0 27.06 6.5T775-816l53 71q6 7.76 9 16.94 3 9.18 3 19.06v529q0 24.75-17.62 42.37Q804.75-120 780-120H180Zm17-614h565l-36.41-46H233l-36 46Zm283 307Z","upload":"M450-313v-371L330-564l-43-43 193-193 193 193-43 43-120-120v371h-60ZM220-160q-24 0-42-18t-18-42v-143h60v143h520v-143h60v143q0 24-18 42t-42 18H220Z","download":"M480-313 287-506l43-43 120 120v-371h60v371l120-120 43 43-193 193ZM220-160q-24 0-42-18t-18-42v-143h60v143h520v-143h60v143q0 24-18 42t-42 18H220Z","view_week":"M140-220h187v-520H140v520Zm247 0h186v-520H387v520Zm246 0h187v-520H633v520Zm-493 60q-24 0-42-18t-18-42v-520q0-24 18-42t42-18h680q24 0 42 18t18 42v520q0 24-18 42t-42 18H140Z","warning":"m40-120 440-760 440 760H40Zm104-60h672L480-760 144-180Zm340.18-57q12.82 0 21.32-8.68 8.5-8.67 8.5-21.5 0-12.82-8.68-21.32-8.67-8.5-21.5-8.5-12.82 0-21.32 8.68-8.5 8.67-8.5 21.5 0 12.82 8.68 21.32 8.67 8.5 21.5 8.5ZM454-348h60v-224h-60v224Zm26-122Z","wb_sunny":"M450-810v-110h60v110h-60Zm0 770v-110h60v110h-60Zm360-410v-60h110v60H810Zm-770 0v-60h110v60H40Zm702-250-43-43 66-66 43 43-66 66ZM195-151l-43-43 66-66 43 43-66 66Zm570 0-66-66 43-43 66 66-43 43ZM218-700l-66-66 43-43 66 66-43 43Zm261.82 445Q386-255 320.5-320.68 255-386.35 255-480.18q0-93.82 65.68-159.32 65.67-65.5 159.5-65.5 93.82 0 159.32 65.68 65.5 65.67 65.5 159.5 0 93.82-65.68 159.32-65.67 65.5-159.5 65.5Zm.11-60Q549-315 597-362.93q48-47.94 48-117Q645-549 597.07-597q-47.94-48-117-48Q411-645 363-597.07q-48 47.94-48 117Q315-411 362.93-363q47.94 48 117 48Zm.07-165Z","weekend":"M152-692q0-45 31.5-76.5T260-800h440q45 0 76.5 31.5T808-692v83q48-5 80 21t32 75v245q0 45-31.5 76.5T812-160H148q-45 0-76.5-31.5T40-268v-245q0-49 32.5-75t79.5-21v-83Zm60 0v112q14 14 22 27.5t8 39.5v124h476v-124q0-26 8-39.5t22-27.5v-112q0-21-13.5-34.5T700-740H260q-21 0-34.5 13.5T212-692Zm566 363H182v-184q0-10-2.5-17.5t-8-13q-5.5-5.5-13-8t-17.1-2.5q-20.4 0-30.9 10.5T100-513v245.16q0 20.84 13.5 34.34Q127-220 148-220h664q21 0 34.5-13.5t13.5-34.34V-513q0-20-10.5-30.5T818.6-554q-9.6 0-17.1 2.5-7.5 2.5-12.68 8-5.17 5.5-8 13Q778-523 778-513v184Zm-298 0Zm0 109Zm0-169Z","work":"M140-120q-24 0-42-18t-18-42v-480q0-24 18-42t42-18h180v-100q0-24 18-42t42-18h200q24 0 42 18t18 42v100h180q24 0 42 18t18 42v480q0 24-18 42t-42 18H140Zm0-60h680v-480H140v480Zm240-540h200v-100H380v100ZM140-180v-480 480Z","history":"M477-120q-149 0-253-105.5T120-481h60q0 125 86 213t211 88q127 0 215-89t88-216q0-124-89-209.5T477-780q-68 0-127.5 31T246-667h105v60H142v-208h60v106q52-61 123.5-96T477-840q75 0 141 28t115.5 76.5Q783-687 811.5-622T840-482q0 75-28.5 141t-78 115Q684-177 618-148.5T477-120Zm128-197L451-469v-214h60v189l137 134-43 43Z","description":"M319-250h322v-60H319v60Zm0-170h322v-60H319v60ZM220-80q-24 0-42-18t-18-42v-680q0-24 18-42t42-18h361l219 219v521q0 24-18 42t-42 18H220Zm331-554v-186H220v680h520v-494H551ZM220-820v186-186 680-680Z","link_off":"m750-291-49-49q51-10 85-48t34-89q0-58-41-99t-99-41H525v-60h155q83 0 141.5 58.5T880-477q0 62-36 112t-94 74ZM594-447l-60-60h101v60h-41ZM814-56 63-807l43-43L857-99l-43 43ZM450-280H280q-83 0-141.5-58.5T80-480q0-72 44.5-127T238-676l56 56h-14q-58 0-99 41t-41 99q0 58 41 99t99 41h170v60ZM325-450v-60h79l60 60H325Z","shield":"M480-81q-140-35-230-162.5T160-523v-238l320-120 320 120v238q0 152-90 279.5T480-81Zm0-62q115-38 187.5-143.5T740-523v-196l-260-98-260 98v196q0 131 72.5 236.5T480-143Zm0-337Z","palette":"M480-80q-82 0-155-31.5t-127.5-86Q143-252 111.5-325T80-480q0-85 32-158t87.5-127q55.5-54 130-84.5T489-880q79 0 150 26.5T763.5-780q53.5 47 85 111.5T880-527q0 108-63 170.5T650-294h-75q-18 0-31 14t-13 31q0 27 14.5 46t14.5 44q0 38-21 58.5T480-80Zm0-400Zm-233 26q20 0 35-15t15-35q0-20-15-35t-35-15q-20 0-35 15t-15 35q0 20 15 35t35 15Zm126-170q20 0 35-15t15-35q0-20-15-35t-35-15q-20 0-35 15t-15 35q0 20 15 35t35 15Zm214 0q20 0 35-15t15-35q0-20-15-35t-35-15q-20 0-35 15t-15 35q0 20 15 35t35 15Zm131 170q20 0 35-15t15-35q0-20-15-35t-35-15q-20 0-35 15t-15 35q0 20 15 35t35 15ZM480-140q11 0 15.5-4.5T500-159q0-14-14.5-26T471-238q0-46 30-81t76-35h73q76 0 123-44.5T820-527q0-132-100-212.5T489-820q-146 0-247.5 98.5T140-480q0 141 99.5 240.5T480-140Z","edit":"M180-180h44l472-471-44-44-472 471v44Zm-60 60v-128l575-574q8-8 19-12.5t23-4.5q11 0 22 4.5t20 12.5l44 44q9 9 13 20t4 22q0 11-4.5 22.5T823-694L248-120H120Zm659-617-41-41 41 41Zm-105 64-22-22 44 44-22-22Z","timer":"M360-860v-60h240v60H360Zm90 447h60v-230h-60v230Zm30 332q-74 0-139.5-28.5T226-187q-49-49-77.5-114.5T120-441q0-74 28.5-139.5T226-695q49-49 114.5-77.5T480-801q67 0 126 22.5T711-716l51-51 42 42-51 51q36 40 61.5 97T840-441q0 74-28.5 139.5T734-187q-49 49-114.5 77.5T480-81Zm0-60q125 0 212.5-87.5T780-441q0-125-87.5-212.5T480-741q-125 0-212.5 87.5T180-441q0 125 87.5 212.5T480-141Zm0-299Z","notes":"M120-240v-60h480v60H120Zm0-210v-60h720v60H120Zm0-210v-60h720v60H120Z"};
 
 /* ---------- icone (SVG incorporati, nessun font esterno) ---------- */
 function hydrateIcons(root){
@@ -728,9 +970,24 @@ const lunchS = () => S.settings.lunchStart, lunchE = () => S.settings.lunchEnd;
 
 function dayStats(k){
   const st = {lav:0, ferie:0, rol:0, perm:0, mal:0, total:0, byProj:{}};
-  const d = S.days.get(k); if (!d) return st;
-  for (const x of d.entries){ const h = (x.e - x.s)/60; st[x.t] += h; st.total += h; if (x.t === 'lav'){ const k2 = x.p || NONE_KEY; st.byProj[k2] = (st.byProj[k2]||0) + h; } }
+  const d = S.days.get(k); if (!d || !d.entries.length) return st;
+  const xs = d.entries, pts = [...new Set(xs.flatMap(x => [x.s, x.e]))].sort((a,b) => a - b);
+  for (let i = 0; i < pts.length - 1; i++){
+    const a = pts[i], b = pts[i+1], act = xs.filter(x => x.s <= a && x.e >= b); if (!act.length) continue;
+    const h = (b - a) / 60 / act.length; // le ore in contemporanea si dividono tra le voci
+    for (const x of act){ st[x.t] += h; st.total += h; if (x.t === 'lav'){ const k2 = x.p || NONE_KEY; st.byProj[k2] = (st.byProj[k2]||0) + h; } }
+  }
   return st;
+}
+function laneMap(xs){
+  const out = new Map(), sorted = [...xs].sort((a,b) => a.s - b.s || b.e - a.e); let cl = [], cols = [], end = -1;
+  const flush = () => { for (const x of cl) out.get(x.id).n = cols.length; cl = []; cols = []; };
+  for (const x of sorted){
+    if (cl.length && x.s >= end) flush();
+    let i = cols.findIndex(e => e <= x.s); if (i < 0){ i = cols.length; cols.push(x.e); } else cols[i] = x.e;
+    out.set(x.id, {i, n:1}); cl.push(x); end = Math.max(end, x.e);
+  }
+  flush(); return out;
 }
 function rangeStats(from, to){
   const t0 = today0(), dh = S.settings.dailyHours;
@@ -1153,7 +1410,7 @@ function openDataDialog(){
     <section><span class="t-title-s">Privacy</span><p style="margin:0">La pagina non ha accesso a internet: ogni connessione è bloccata nel codice stesso, quindi nessun dato può essere inviato a Claude, ad Anthropic, a GitHub o ad altri. Non si apre dentro altre pagine e non viene indicizzata dai motori di ricerca.</p>
       <span class="t-body-s muted">Versione dell'app ${APP_VERSION}</span></section>
     <section><span class="t-title-s">Backup ed esportazione</span><p style="margin:0">Il backup è un file JSON con tutti i dati e le impostazioni: si reimporta qui con «Importa backup». Il CSV si apre con Excel o Numbers${VAULT.on ? ' ma <b>non è cifrato</b>: conservalo con cura' : ''}.${le !== null ? ` Ultimo backup scaricato ${le === 0 ? 'oggi' : le === 1 ? 'ieri' : le + ' giorni fa'}.` : ''}</p>
-      <div class="chips"><button type="button" class="chip sl" id="dBk"><span class="ms">download</span>Scarica backup${VAULT.on ? ' (cifrato)' : ''}</button><button type="button" class="chip sl" id="dCsv"><span class="ms">table_view</span>Esporta tutto in CSV</button><button type="button" class="chip sl" id="dImp"><span class="ms">upload</span>Importa backup</button></div></section>
+      <div class="chips"><button type="button" class="chip sl" id="dBk"><span class="ms">download</span>Scarica backup${VAULT.on ? ' (cifrato)' : ''}</button><button type="button" class="chip sl" id="dCsv"><span class="ms">table_view</span>Esporta tutto in CSV</button><button type="button" class="chip sl" id="dPdf"><span class="ms">description</span>Esporta in PDF</button><button type="button" class="chip sl" id="dImp"><span class="ms">upload</span>Importa backup</button></div></section>
     ${S.mode === 'file' ? `<section><span class="t-title-s">Copia nel browser</span><p style="margin:0" class="t-body-s muted">Per lavorare anche quando la cartella non è collegata, l'app tiene una copia dei dati nel browser${VAULT.on ? ' (cifrata)' : ''}. Se smetti di usare l'app su questo computer o browser, puoi cancellarla: i dati restano nella cartella.</p>
       <div id="wipeBox"><button type="button" class="btn text danger sm sl has-icon" id="dWipe"><span class="ms">delete</span>Cancella la copia da questo browser</button></div></section>` : ''}
     <footer>${S.mode === 'file' ? `<button type="button" class="btn text danger sl sp" id="dOff"><span class="ms">link_off</span>Scollega cartella</button>` : ''}
@@ -1174,6 +1431,7 @@ function openDataDialog(){
         q('#wYes').onclick = () => { closeDialog(); wipeBrowserCopy(); };
       };
       root.querySelector('#dCsv').onclick = () => exportCSV(true);
+      root.querySelector('#dPdf').onclick = () => openPdfDialog();
       root.querySelector('#dImp').onclick = () => { closeDialog(); document.getElementById('importFile').click(); };
       const o = root.querySelector('#dOff'); if (o) o.onclick = () => { closeDialog(); disconnectFolder(); };
       const r = root.querySelector('#dRes'); if (r) r.onclick = () => { closeDialog(); resumeFolder(); };
@@ -1231,7 +1489,7 @@ function weekHTML(){
   const days = [...Array(7)].map((_,i) => addDays(mon,i));
   const v0 = st.viewStart*60, v1 = st.viewEnd*60, R = st.viewEnd - st.viewStart, H = R*ROW;
   const y = m => (Math.max(v0, Math.min(v1, m)) - v0) / 60 * ROW;
-  let html = `<div class="hint"><span class="ms">touch_app</span>Clicca un'ora o trascina per selezionare un intervallo. Clicca un blocco per modificarlo, trascinalo su un altro giorno per copiarlo (tieni premuto ⌥ per spostarlo).</div>`;
+  let html = `<div class="hint"><span class="ms">touch_app</span>Clicca un'ora o trascina per registrare. Trascina un blocco per spostarlo, anche su un altro giorno (con ⌥ lo copi). Trascina il suo bordo per allungarlo.</div>`;
   html += `<div class="wk-scroll"><div class="wk" style="grid-template-columns:54px repeat(5,minmax(124px,1fr)) repeat(2,minmax(108px,.7fr));grid-template-rows:auto ${H}px">`;
   html += `<div></div>`;
   days.forEach((d, i) => {
@@ -1245,9 +1503,8 @@ function weekHTML(){
       <div class="top"><span class="dn">${DOW_S[i]}</span><span class="num">${isToday ? cookieSvg : ''}<span>${d.getDate()}</span></span>
       <button class="ibtn sm sl menu-btn" data-daymenu="${inf.key}" aria-label="Azioni per ${DOW_L[i]} ${d.getDate()}"><span class="ms">more_vert</span></button></div>
       ${inf.hol ? `<span class="hol"><span class="ms">celebration</span>${esc(inf.hol)}</span>` : ''}
-      <div class="meta">${tally}
-        ${dd && dd.loc ? `<span class="ms" title="${esc(LOCS[dd.loc])}" aria-label="${esc(LOCS[dd.loc])}">${LOC_IC[dd.loc]}</span>` : ''}
-        ${dd && dd.note && !inf.weekend ? `<span class="ms" title="${esc(dd.note)}" aria-label="Nota del giorno">sticky_note_2</span>` : ''}
+      <div class="meta"><button type="button" class="locchip ${dd && dd.loc ? dd.loc : 'none'}" data-locmenu="${inf.key}" aria-label="Dove hai lavorato ${DOW_L[i]} ${d.getDate()}: ${esc(LOCS[dd && dd.loc || ''])}"><span class="ms">${dd && dd.loc ? LOC_IC[dd.loc] : 'add'}</span>${dd && dd.loc ? LOC_S[dd.loc] : 'Luogo'}</button>${tally}
+        ${dd && dd.note && !inf.weekend ? `<button type="button" class="notebtn" data-note="${inf.key}" data-tip="${esc(dd.note)}" aria-label="Nota del giorno: ${esc(dd.note)}"><span class="ms">sticky_note_2</span></button>` : ''}
         ${hidden && !inf.weekend ? `<span class="offgrid">+${hidden} fuori griglia</span>` : ''}
       </div></div>`;
   });
@@ -1269,13 +1526,15 @@ function weekHTML(){
     if (st.workEnd < v1) col += `<div class="shade off" style="top:${y(st.workEnd)}px;height:${H - y(st.workEnd)}px"></div>`;
     col += `<div class="shade lunch" style="top:${y(st.lunchStart)}px;height:${y(st.lunchEnd) - y(st.lunchStart)}px"></div>`;
     col += `<div class="slots">${[...Array(R)].map((_,r) => `<div class="slot" data-h="${st.viewStart + r}" tabindex="0" role="button" aria-label="${DOW_L[i]} ${d.getDate()}, ore ${pad(st.viewStart + r)}:00"></div>`).join('')}</div>`;
+    const lanes = laneMap(dd ? dd.entries : []);
     for (const x of (dd ? dd.entries : [])){
       if (x.e <= v0 || x.s >= v1) continue;
+      const ln = lanes.get(x.id), lnS = ln && ln.n > 1 ? `left:calc(4px + (100% - 8px) * ${ln.i} / ${ln.n});width:calc((100% - 8px) / ${ln.n} - 2px);right:auto;` : '';
       const top = y(x.s), h = Math.max(12, y(x.e) - top - 2), L = entryLabel(x);
       const size = h < 26 ? ' xs' : h < 44 ? ' sm' : '';
-      col += `<button class="blk ${L.cls}${size}" style="top:${top+1}px;height:${h}px;${L.style}" data-edit="${inf.key}|${x.id}" aria-label="${esc(L.name)} ${fmtT(x.s)}–${fmtT(x.e)}">
+      col += `<button class="blk ${L.cls}${size}${lnS ? ' lane' : ''}" style="top:${top+1}px;height:${h}px;${lnS}${L.style}" data-edit="${inf.key}|${x.id}" aria-label="${esc(L.name)} ${fmtT(x.s)}–${fmtT(x.e)}">
         <span class="l1">${L.icon ? `<span class="ms">${L.icon}</span>` : ''}<span class="nm">${esc(L.name)}</span></span>
-        <span class="tm">${fmtT(x.s)}–${fmtT(x.e)}</span>${x.n ? `<span class="nt">${esc(x.n)}</span>` : ''}</button>`;
+        <span class="tm">${fmtT(x.s)}–${fmtT(x.e)}</span>${x.n ? `<span class="nt">${esc(x.n)}</span>` : ''}<span class="rz t" data-rz="t" title="Trascina per cambiare l'inizio"></span><span class="rz b" data-rz="b" title="Trascina per cambiare la fine"></span></button>`;
     }
     if (+d === +t0){ const now = new Date(), nm = now.getHours()*60 + now.getMinutes(); if (nm >= v0 && nm < v1) col += `<div class="nowline" style="top:${y(nm)}px"></div>`; }
     col += `<div class="selbox" hidden><b></b></div></div>`;
@@ -1302,10 +1561,12 @@ function monthHTML(){
     for (const [p,v] of Object.entries(ds.byProj)) segs.push(`<i style="width:${v/den*100}%;${projStyle(p)}"></i>`);
     for (const t of ['ferie','rol','perm','mal']) if (ds[t]) segs.push(`<i class="t-${t}" style="width:${ds[t]/den*100}%"></i>`);
     const tags = ['ferie','rol','perm','mal'].filter(t => ds[t]).map(t => `<span class="tag t-${t}"><span class="ms">${TYPES[t].icon}</span>${TYPES[t].label} ${fmtHM(ds[t])}</span>`).join('');
+    const lc = (S.days.get(inf.key) || {}).loc;
+    const ltag = lc && !out ? `<span class="tag lc" title="${esc(LOCS[lc])}"><span class="ms">${LOC_IC[lc]}</span>${LOC_S[lc]}</span>` : '';
     html += `<button class="${cls}" data-goto="${inf.key}" aria-label="${d.getDate()} ${MON_L[d.getMonth()]}${inf.hol ? ', ' + esc(inf.hol) : ''}, ${fmtHM(ds.total)}">
       <span class="r1"><span class="d">${+d === +t0 ? cookieSvg : ''}<span>${d.getDate()}</span></span>${miss ? `<span class="warn" title="Ore mancanti"><span class="ms">warning</span></span>` : (ds.total ? `<span class="tot">${fmtHM(ds.total)}</span>` : '')}</span>
       ${inf.hol ? `<span class="hn">${esc(inf.hol)}</span>` : ''}
-      <span class="tags">${tags}</span>
+      <span class="tags">${ltag}${tags}</span>
       ${(ds.total || inf.workday) && !out ? `<span class="bar2">${segs.join('')}</span>` : ''}
     </button>`;
   }
@@ -1389,13 +1650,16 @@ function renderPane(){
   let html = '';
   if (S.mode === 'locked') html += `<div class="banner err"><span class="ms">lock</span><div class="bn"><span>Chrome chiede di nuovo il permesso sulla cartella <b>«${esc(FS.pending.name)}»</b>: nella finestra scegli <b>«Consenti a ogni visita»</b> e non te lo chiederà più. Intanto le modifiche restano nel browser.</span><button class="btn sl" data-act="resume">Ricollega cartella</button></div></div>`;
   else if (S.mode === 'browser') html += `<div class="banner"><span class="ms">warning</span><div class="bn"><span>I dati sono solo nella memoria di questo browser${le === null ? '' : ` · ultimo backup ${le === 0 ? 'oggi' : le + ' gg fa'}`}. ${FS.supported ? 'Collega una cartella del Mac per salvarli in un file.' : 'Scarica spesso un backup, oppure apri il file con Chrome per salvarli in una cartella.'}</span>${FS.supported ? `<button class="btn sl has-icon" data-act="folder"><span class="ms">folder_open</span>Scegli cartella</button>` : `<button class="btn sl has-icon" data-act="backup"><span class="ms">download</span>Scarica backup</button>`}</div></div>`;
-  html += `<section class="card"><h3 class="t-title-m">Riepilogo ${pName}</h3>
-    <div class="kpis">
-      <div class="kpi hero"><span class="v">${kvHM(r.lav)}</span><span class="k">Ore lavorate</span></div>
-      <div class="kpi"><span class="v">${r.worked}<small>/${r.workdays}</small></span><span class="k">Giorni lavorati</span></div>
-      <div class="kpi ${r.missing ? 'warn' : 'ok'}"><span class="v">${kvHM(r.missing)}</span><span class="k">${r.missing ? `Da compilare (${r.missDays} gg)` : 'Tutto compilato'}</span></div>
-      <div class="kpi"><span class="v">${kvHM(r.over)}</span><span class="k">Oltre l'orario</span></div>
-    </div></section>`;
+  const absH = r.ferie + r.rol + r.mal + r.perm, den = Math.max(r.expected, r.total, 0.001);
+  const pastWd = (() => { let n = 0; for (let d = new Date(a); d <= b && d < today0(); d = addDays(d,1)) if (info(d).workday) n++; return n; })();
+  html += `<section class="card white sum"><h3 class="t-title-m">Riepilogo ${pName}</h3>
+    <div class="sum-main"><span class="k">Ore lavorate</span><span class="v">${kvHM(r.lav)}</span><span class="of">su ${fmtHM(r.expected)} previste</span></div>
+    <div class="sum-bar" aria-hidden="true"><i class="lav" style="width:${r.lav/den*100}%"></i>${absH ? `<i class="abs" style="width:${absH/den*100}%"></i>` : ''}</div>
+    ${absH ? `<div class="sum-leg"><span><i class="lav"></i>Lavoro ${fmtHM(r.lav)}</span><span><i class="abs"></i>Assenze ${fmtHM(absH)}</span></div>` : ''}
+    ${r.missing ? `<div class="sum-status warn"><span class="ms">error</span><span>Da compilare: <b>${fmtHM(r.missing)}</b> in ${r.missDays} ${r.missDays === 1 ? 'giorno' : 'giorni'}</span></div>`
+      : pastWd ? `<div class="sum-status ok"><span class="ms">check</span><span>Tutto compilato</span></div>` : ''}
+    <dl class="sum-list"><div><dt>Giorni lavorati</dt><dd>${r.worked} <span>di ${r.workdays}</span></dd></div><div><dt>Oltre l'orario</dt><dd>${r.over ? fmtHM(r.over) : '—'}</dd></div></dl>
+  </section>`;
   html += `<section class="card white"><div class="ch"><h3 class="t-title-m">Ore per progetto</h3>
     <button class="btn tonal sm sl has-icon" data-act="newproj"><span class="ms">add</span>Nuovo progetto</button></div>
     ${prows.length ? `<ul class="plist">${prows.map(([pid, v]) => { const p = proj(pid); return `<li style="${projStyle(pid)}"><span class="dot"></span><span class="nm">${esc(projName(pid))}${p && p.deleted ? ' <span class="muted">(eliminato)</span>' : ''}</span><span class="hv">${fmtHM(v)}</span><span class="tr"><i style="width:${v/maxP*100}%"></i></span></li>`; }).join('')}</ul>` :
@@ -1426,7 +1690,72 @@ function renderPane(){
       return `<li><span class="dt"><b>${d.getDate()}</b><span>${MON_S[d.getMonth()]}</span></span><span class="tx"><span class="t-title-s">${esc(n)}</span><span class="t-body-s muted">${DOW_L[w]}${w >= 5 ? ' · cade nel weekend' : ''}</span>${ponte ? `<span class="ponte"><span class="ms">beach_access</span>${ponte}</span>` : ''}</span></li>`; }).join('')}
   </ul></section>`;
   pane.innerHTML = html;
+  arrangeCards(pane);
 }
+
+/* widget a destra: ordine personalizzabile (trascina dalla maniglia) */
+const CARD_IDS = ['sum','proj','abs','bal','hol'], CARD_KEY = LS_KEY + '.cards';
+function cardOrder(){ try { const o = JSON.parse(localStorage.getItem(CARD_KEY) || '[]'); if (Array.isArray(o)) return [...o.filter(x => CARD_IDS.includes(x)), ...CARD_IDS.filter(x => !o.includes(x))]; } catch (e) {} return CARD_IDS.slice(); }
+function saveCardOrder(pane){ try { localStorage.setItem(CARD_KEY, JSON.stringify([...pane.querySelectorAll(':scope > [data-card]')].map(c => c.dataset.card))); } catch (e) {} }
+function arrangeCards(pane){
+  const cards = [...pane.querySelectorAll(':scope > section.card')];
+  cards.forEach((c, i) => { c.dataset.card = CARD_IDS[i] || 'x' + i;
+    const g = document.createElement('button'); g.type = 'button'; g.className = 'grip'; g.setAttribute('aria-label', 'Sposta questo riquadro (frecce su e giù)'); g.title = 'Trascina per spostare';
+    g.innerHTML = '<span class="ms">drag_indicator</span>'; c.prepend(g); });
+  const by = Object.fromEntries(cards.map(c => [c.dataset.card, c]));
+  for (const id of cardOrder()) if (by[id]) pane.appendChild(by[id]);
+  hydrateIcons(pane);
+}
+let cdrag = null;
+const pane0 = document.getElementById('pane');
+pane0.addEventListener('pointerdown', e => {
+  const g = e.target.closest('.grip'); if (!g || e.button > 0) return;
+  const card = g.closest('[data-card]'); e.preventDefault();
+  cdrag = {card, x:e.clientX, y:e.clientY, started:false};
+});
+pane0.addEventListener('keydown', e => {
+  const g = e.target.closest('.grip'); if (!g || (e.key !== 'ArrowUp' && e.key !== 'ArrowDown')) return;
+  e.preventDefault(); const c = g.closest('[data-card]');
+  if (e.key === 'ArrowUp'){ const p = c.previousElementSibling; if (p && p.dataset.card) p.before(c); }
+  else { const n = c.nextElementSibling; if (n && n.dataset.card) n.after(c); }
+  saveCardOrder(pane0); g.focus();
+});
+window.addEventListener('pointermove', e => {
+  const d = cdrag; if (!d) return;
+  if (!d.started){
+    if (Math.hypot(e.clientX - d.x, e.clientY - d.y) < 4) return;
+    const r = d.card.getBoundingClientRect(); d.oy = e.clientY - r.top; d.ox = e.clientX - r.left;
+    d.ph = document.createElement('div'); d.ph.className = 'card-ph'; d.ph.style.height = r.height + 'px';
+    d.card.after(d.ph);
+    Object.assign(d.card.style, {position:'fixed', width:r.width + 'px', left:r.left + 'px', top:r.top + 'px', zIndex:80});
+    d.card.classList.add('lifting'); document.body.classList.add('card-dragging'); d.started = true;
+  }
+  d.card.style.top = (e.clientY - d.oy) + 'px'; d.card.style.left = (e.clientX - d.ox) + 'px';
+  const others = [...pane0.querySelectorAll(':scope > [data-card]')].filter(c => c !== d.card);
+  const nx = others.find(c => { const r = c.getBoundingClientRect(); return e.clientY < r.top + r.height/2; });
+  if (nx){ if (d.ph.nextElementSibling !== nx) nx.before(d.ph); } else if (others.length){ others[others.length-1].after(d.ph); }
+});
+function endCardDrag(){
+  const d = cdrag; cdrag = null; if (!d || !d.started) return;
+  d.ph.replaceWith(d.card); d.card.removeAttribute('style'); d.card.classList.remove('lifting'); document.body.classList.remove('card-dragging');
+  saveCardOrder(pane0);
+}
+window.addEventListener('pointerup', endCardDrag);
+window.addEventListener('pointercancel', endCardDrag);
+
+/* nota del giorno al passaggio del mouse */
+let tipEl = null;
+function showTip(el){
+  if (!tipEl){ tipEl = document.createElement('div'); tipEl.className = 'tipbox'; tipEl.setAttribute('role','tooltip'); document.body.appendChild(tipEl); }
+  tipEl.textContent = el.dataset.tip; tipEl.hidden = false;
+  const r = el.getBoundingClientRect(), w = tipEl.offsetWidth, h = tipEl.offsetHeight;
+  tipEl.style.left = Math.max(8, Math.min(window.innerWidth - w - 8, r.left + r.width/2 - w/2)) + 'px';
+  tipEl.style.top = (r.bottom + h + 12 > window.innerHeight ? r.top - h - 8 : r.bottom + 8) + 'px';
+}
+const hideTip = () => { if (tipEl) tipEl.hidden = true; };
+document.addEventListener('mouseover', e => { const t = e.target.closest && e.target.closest('[data-tip]'); if (t) showTip(t); else hideTip(); });
+document.addEventListener('focusin', e => { const t = e.target.closest && e.target.closest('[data-tip]'); if (t) showTip(t); else hideTip(); });
+document.addEventListener('scroll', hideTip, true);
 
 /* ---------- dialog ---------- */
 const dlg = document.getElementById('dlg');
@@ -1484,7 +1813,7 @@ function openEntry(k, s, e, editId){
   const editing = editId && d ? d.entries.find(x => x.id === editId) : null;
   const overl = d ? d.entries.filter(x => x.s < e && x.e > s) : [];
   const lp = st.lastProjectId === '' ? '' : activeP(proj(st.lastProjectId)) ? st.lastProjectId : ((st.projects.find(activeP) || {}).id || '');
-  const state = editing ? {t:editing.t, p:editing.p || lp || null, n:editing.n || '', s:editing.s, e:editing.e} : {t:'lav', p:lp || null, n:'', s, e};
+  const state = editing ? {t:editing.t, p:editing.p || lp || null, n:editing.n || '', s:editing.s, e:editing.e, ov:'side'} : {t:'lav', p:lp || null, n:'', s, e, ov:'side'};
   const also = new Set([k]);
   const wkDays = inf0.weekend || editing ? [] : [...Array(5)].map((_,i) => addDays(startOfWeek(parseKey(k)), i));
   const lunchAffects = () => splitLunch(state.s, state.e).length > 1 || (state.s < lunchE() && state.e > lunchS() && !(state.s >= lunchS() && state.e <= lunchE()));
@@ -1511,6 +1840,9 @@ function openEntry(k, s, e, editId){
         <button type="button" class="ibtn ok sl" id="addP" aria-label="Crea progetto" title="Crea progetto"><span class="ms">check</span></button><button type="button" class="ibtn sl" id="cancelP" aria-label="Annulla" title="Annulla"><span class="ms">close</span></button></div>
       <span class="err-text" id="projErr" hidden>Scegli un progetto o creane uno nuovo.</span>
     </section>
+    <section id="ovSec" hidden><span class="t-title-s">Si sovrappone a <span id="ovList"></span></span>
+      <div class="chips"><button type="button" class="chip sl" data-ov="side" aria-pressed="true"><span class="ms">check</span>Affianca: lavoro in contemporanea</button><button type="button" class="chip sl" data-ov="replace" aria-pressed="false"><span class="ms">swap_horiz</span>Sostituisci</button></div>
+      <span class="t-body-s muted" id="ovHint"></span></section>
     <section><div class="tf"><label for="fNote">Note</label><textarea id="fNote" maxlength="500" placeholder="Attività svolte, riferimenti, ticket…">${esc(state.n)}</textarea></div></section>
     <footer>${editing ? `<button type="button" class="btn text danger sl sp has-icon" id="delBtn"><span class="ms">delete</span>Elimina voce</button>` : (overl.length ? `<button type="button" class="btn text danger sl sp has-icon" id="clrBtn"><span class="ms">delete_sweep</span>Svuota intervallo</button>` : '')}
       <button type="button" class="btn text sl" data-close>Annulla</button><button type="submit" class="btn filled sl">Salva</button></footer>
@@ -1525,6 +1857,13 @@ function openEntry(k, s, e, editId){
       if (ok && !$('#lunchWrap').hidden && $('#fLunch').checked) mins = splitLunch(state.s, state.e).reduce((a,[x,y]) => a + y - x, 0);
       $('#durV').textContent = ok ? fmtHM(mins/60) : '—';
       $('#durT').textContent = state.t === 'lav' ? 'di lavoro' : TYPES[state.t].label.toLowerCase();
+      const ovs = ok && d ? d.entries.filter(x => x.id !== editId && x.s < state.e && x.e > state.s) : [];
+      $('#ovSec').hidden = !ovs.length;
+      if (ovs.length){
+        $('#ovList').textContent = ovs.map(x => `${entryLabel(x).name} ${fmtT(x.s)}–${fmtT(x.e)}`).join(', ');
+        root.querySelectorAll('[data-ov]').forEach(b => { const on = b.dataset.ov === state.ov; b.setAttribute('aria-pressed', on); b.querySelector('.ms').textContent = on ? 'check' : (b.dataset.ov === 'side' ? 'view_week' : 'swap_horiz'); });
+        $('#ovHint').textContent = state.ov === 'side' ? 'Le due voci restano affiancate. Nei totali le ore in comune si dividono a metà, così la giornata non supera le ore reali.' : 'Le ore sovrapposte delle altre voci vengono tolte.';
+      }
       root.querySelectorAll('[data-type]').forEach(b => { const on = b.dataset.type === state.t; b.setAttribute('aria-pressed', on); b.querySelector('.ms').textContent = on ? 'check' : TYPES[b.dataset.type].icon; });
     };
     const setRange = (a, b) => { state.s = a; state.e = b; $('#fFrom').value = fmtT(a); $('#fTo').value = fmtT(Math.min(b, 1439)); sync(); };
@@ -1539,6 +1878,7 @@ function openEntry(k, s, e, editId){
       if (q === 'pm') setRange(st.lunchEnd, st.workEnd);
     });
     root.querySelectorAll('[data-type]').forEach(b => b.onclick = () => { state.t = b.dataset.type; sync(); });
+    root.querySelectorAll('[data-ov]').forEach(b => b.onclick = () => { state.ov = b.dataset.ov; sync(); });
     root.querySelectorAll('[data-also]').forEach(b => b.onclick = () => {
       const kk = b.dataset.also; if (also.has(kk)) also.delete(kk); else also.add(kk);
       const on = also.has(kk); b.setAttribute('aria-pressed', on); b.querySelector('.ms').textContent = on ? 'check' : (info(parseKey(kk)).hol ? 'celebration' : 'calendar_today');
@@ -1586,7 +1926,7 @@ function openEntry(k, s, e, editId){
         const dd = getDay(kk);
         if (editing && kk === k) dd.entries = dd.entries.filter(x => x.id !== editId);
         const parts = skip ? splitLunch(state.s, state.e) : [[state.s, state.e]];
-        for (const [a, b] of parts){ dd.entries = subtractRange(dd.entries, a, b); dd.entries.push({...entry, id:rid(), s:a, e:b}); mins += b - a; }
+        for (const [a, b] of parts){ if (state.ov === 'replace') dd.entries = subtractRange(dd.entries, a, b); dd.entries.push({...entry, id:rid(), s:a, e:b}); mins += b - a; }
         dd.entries.sort((x,y) => x.s - y.s);
       }
       closeDialog();
@@ -1634,7 +1974,7 @@ function openMenu(anchor, items){
   const f = m.querySelector('button'); if (f) f.focus();
 }
 document.addEventListener('pointerdown', e => { if (menuEl && !menuEl.contains(e.target)) closeMenu(); }, true);
-document.addEventListener('keydown', e => { if (e.key === 'Escape'){ closeMenu(); if (bdrag && bdrag.started){ const d = bdrag; bdrag = null; d.ghost.remove(); d.tag.remove(); document.body.classList.remove('dragging'); if (d.over) d.over.classList.remove('drop-ok'); suppressClickUntil = Date.now() + 250; } } });
+document.addEventListener('keydown', e => { if (e.key === 'Escape'){ closeMenu(); if (rdrag) endResize(true); if (bdrag && bdrag.started){ const d = bdrag; bdrag = null; cleanBlockDrag(d); } } });
 
 function fillDay(k, t){
   const st = S.settings, before = snapshotDays([k]), d = getDay(k);
@@ -1649,6 +1989,14 @@ function copyPrev(k){
   if (!src){ snack('Nessun giorno con ore registrate nelle 2 settimane precedenti'); return; }
   const before = snapshotDays([k]), d = getDay(k); d.entries = src.entries.map(x => ({...clone(x), id:rid()}));
   commit([k], before, `Copiato da ${dayTitle(src.date).toLowerCase()}`);
+}
+function setLoc(k, v){ const before = snapshotDays([k]), d = getDay(k); d.loc = v; commit([k], before, v ? LOCS[v] : 'Luogo tolto'); }
+function locMenu(btn, k){
+  const cur = (S.days.get(k) || {}).loc || '';
+  openMenu(btn, [
+    ...['uff','smart','tras'].map(v => ({icon: cur === v ? 'check' : LOC_IC[v], label: LOCS[v], fn:() => setLoc(k, v)})),
+    ...(cur ? ['-', {icon:'delete', label:'Togli il luogo', fn:() => setLoc(k, '')}] : [])
+  ]);
 }
 function dayMenu(btn, k){
   const d = S.days.get(k), has = d && !isEmptyDay(d), st = S.settings;
@@ -1788,6 +2136,68 @@ function exportCSV(all){
   }
   download(`timesheet_${keyOf(a)}_${keyOf(b)}.csv`, '﻿' + rows.map(r => r.map(q).join(';')).join('\r\n'), 'text/csv;charset=utf-8');
 }
+function openPdfDialog(){
+  const [a, b] = periodRange();
+  openDialog(`<form class="dlg" id="pdfForm" novalidate>
+    <header><span class="hd-ic"><span class="ms">description</span></span><div><h2 class="t-headline">Esporta in PDF</h2><span class="muted">Diviso per settimane, con tutti i dati di ogni giornata</span></div>
+      <button type="button" class="ibtn sl x" data-close aria-label="Chiudi"><span class="ms">close</span></button></header>
+    <section><div class="row2"><div class="tf"><label for="pA">Dal</label><input id="pA" type="date" value="${keyOf(a)}" required></div><div class="tf"><label for="pB">Al</label><input id="pB" type="date" value="${keyOf(b)}" required></div></div>
+      <span class="err-text" id="pErr" hidden></span>
+      <span class="t-body-s muted">Le settimane vengono incluse per intero, da lunedì a domenica. Nella finestra che si apre scegli <b>Destinazione › Salva come PDF</b>.</span></section>
+    <footer><button type="button" class="btn text sl" data-close>Annulla</button><button type="submit" class="btn filled sl">Crea PDF</button></footer></form>`, root => {
+    root.querySelectorAll('[data-close]').forEach(x => x.onclick = closeDialog);
+    root.querySelector('#pdfForm').onsubmit = e => {
+      e.preventDefault();
+      const va = root.querySelector('#pA').value, vb = root.querySelector('#pB').value, err = root.querySelector('#pErr');
+      if (!va || !vb || vb < va){ err.textContent = 'Controlla le date: «Al» deve essere uguale o successiva a «Dal».'; err.hidden = false; return; }
+      const wks = Math.round((startOfWeek(parseKey(vb)) - startOfWeek(parseKey(va))) / 6048e5) + 1;
+      if (wks > 60){ err.textContent = 'Massimo 60 settimane per volta.'; err.hidden = false; return; }
+      closeDialog(); printReport(parseKey(va), parseKey(vb));
+    };
+  });
+}
+function printReport(a, b){
+  const st = S.settings, dh = st.dailyHours, t0 = today0();
+  const s0 = startOfWeek(a), e0 = addDays(startOfWeek(b), 6);
+  const longD = d => `${d.getDate()} ${MON_L[d.getMonth()]} ${d.getFullYear()}`;
+  const wkRange = (x, y) => x.getMonth() === y.getMonth() ? `${x.getDate()}–${y.getDate()} ${MON_L[y.getMonth()]} ${y.getFullYear()}` : `${x.getDate()} ${MON_S[x.getMonth()]}${x.getFullYear() !== y.getFullYear() ? ' ' + x.getFullYear() : ''} – ${y.getDate()} ${MON_S[y.getMonth()]} ${y.getFullYear()}`;
+  const tot = rangeStats(s0, e0), locN = {uff:0, smart:0, tras:0};
+  for (let d = new Date(s0); d <= e0; d = addDays(d,1)){ const dd = S.days.get(keyOf(d)); if (dd && locN[dd.loc] !== undefined) locN[dd.loc]++; }
+  const projLine = bp => Object.entries(bp).sort((x,z) => z[1]-x[1]).map(([pid, v]) => `<span class="pr-p" style="${projStyle(pid)}"><i></i>${esc(projName(pid))} <b>${fmtHM(v)}</b></span>`).join('');
+  const box = (k, v) => `<div class="pr-k"><span>${k}</span><b>${v}</b></div>`;
+  let h = `<div class="pr"><header class="pr-h"><div><h1>Timesheet</h1><p>${wkRange(s0, e0)}</p></div><p class="pr-gen">Creato il ${longD(t0)}</p></header>
+    <section class="pr-tot">${box('Ore lavorate', fmtHM(tot.lav))}${box('Giorni lavorati', `${tot.worked} di ${tot.workdays}`)}${box('Ferie', `${fmtN(tot.ferie/dh)} gg`)}${box('ROL', fmtHM(tot.rol))}${box('Malattia', `${fmtN(tot.mal/dh)} gg`)}${box('In sede', `${locN.uff} gg`)}${box('Smart working', `${locN.smart} gg`)}${locN.tras ? box('Trasferta', `${locN.tras} gg`) : ''}</section>
+    ${Object.keys(tot.byProj).length ? `<section class="pr-projs"><span class="pr-lbl">Ore per progetto</span>${projLine(tot.byProj)}</section>` : ''}`;
+  for (let w = new Date(s0); w <= e0; w = addDays(w,7)){
+    const we = addDays(w,6), r = rangeStats(w, we), absH = r.ferie + r.rol + r.mal + r.perm;
+    h += `<section class="pr-wk"><div class="pr-wkh"><h2>Settimana ${isoWeek(w)}</h2><span class="pr-wd">${wkRange(w, we)}</span>
+      <span class="pr-ws">Lavorate <b>${fmtHM(r.lav)}</b>${absH ? ` · Assenze <b>${fmtHM(absH)}</b>` : ''} · Totale <b>${fmtHM(r.total)}</b> di ${fmtHM(r.expected)}${r.missing ? ` · <span class="pr-miss">da compilare ${fmtHM(r.missing)}</span>` : ''}</span></div>
+      <table><colgroup><col style="width:17%"><col style="width:14%"><col><col style="width:10%"></colgroup>
+      <thead><tr><th>Giorno</th><th>Luogo</th><th>Attività</th><th class="n">Ore</th></tr></thead><tbody>`;
+    for (let i = 0; i < 7; i++){
+      const d = addDays(w,i), inf = info(d), dd = S.days.get(inf.key), ds = dayStats(inf.key);
+      const xs = dd ? [...dd.entries].sort((x,z) => x.s - z.s) : [];
+      if (inf.weekend && !xs.length && !(dd && (dd.note || dd.loc))) continue;
+      const miss = inf.workday && d < t0 && ds.total < dh - 0.001;
+      let act = xs.map(x => { const L = x.t === 'lav' ? {n: x.p ? projName(x.p) : 'Senza progetto', st: projStyle(x.p || NONE_KEY), c:''} : {n: TYPES[x.t].label, st:'', c:'t-' + x.t};
+        return `<div class="pr-e"><span class="pr-t">${fmtT(x.s)}–${fmtT(x.e)}</span><span class="pr-sw ${L.c}" style="${L.st}"></span><b>${esc(L.n)}</b><span class="pr-eh">${fmtHM((x.e-x.s)/60)}</span>${x.n ? `<span class="pr-n">${esc(x.n)}</span>` : ''}</div>`; }).join('');
+      if (dd && dd.note) act += `<div class="pr-dn">Nota: ${esc(dd.note)}</div>`;
+      if (!xs.length) act = (inf.hol ? `<span class="pr-mut">Festivo</span>` : miss ? `<span class="pr-miss">Da compilare</span>` : `<span class="pr-mut">—</span>`) + act;
+      h += `<tr class="${inf.weekend ? 'we' : ''}${inf.hol ? ' hol' : ''}"><td><b>${DOW_S[i]} ${d.getDate()}</b> ${MON_S[d.getMonth()]}${inf.hol ? `<br><small>${esc(inf.hol)}</small>` : ''}</td>
+        <td>${dd && dd.loc ? LOCS[dd.loc] : '<span class="pr-mut">—</span>'}</td><td>${act}</td><td class="n">${ds.total ? fmtHM(ds.total) : ''}${miss && ds.total ? `<br><small class="pr-miss">−${fmtHM(dh - ds.total)}</small>` : ''}</td></tr>`;
+    }
+    h += `</tbody></table>${Object.keys(r.byProj).length ? `<div class="pr-wkf">${projLine(r.byProj)}</div>` : ''}</section>`;
+  }
+  h += `</div>`;
+  let pr = document.getElementById('printRoot');
+  if (!pr){ pr = document.createElement('div'); pr.id = 'printRoot'; document.body.appendChild(pr); }
+  pr.innerHTML = h; hydrateIcons && hydrateIcons(pr);
+  const oldTitle = document.title; document.title = `Timesheet ${keyOf(s0)}_${keyOf(e0)}`;
+  document.body.classList.add('print-mode');
+  const done = () => { document.body.classList.remove('print-mode'); pr.innerHTML = ''; document.title = oldTitle; };
+  window.addEventListener('afterprint', done, {once:true});
+  setTimeout(() => window.print(), 60);
+}
 function backup(){
   encodeOut(JSON.stringify(buildDoc(), null, 1)).then(t => download(`timesheet_backup_${keyOf(today0())}${VAULT.on ? '_cifrato' : ''}.json`, t, 'application/json'));
   try { localStorage.setItem(LS_KEY + '.lastExport', String(Date.now())); } catch (e) {}
@@ -1851,22 +2261,45 @@ const main = document.getElementById('main');
 /* trascina un blocco su un altro giorno: copia (⌥ = sposta) */
 let bdrag = null, suppressClickUntil = 0;
 function dropTargetAt(x, y){ const el = document.elementFromPoint(x, y); return el && el.closest ? el.closest('[data-col],[data-wk]') : null; }
+function cleanBlockDrag(d){
+  if (d.prev) d.prev.remove(); if (d.tag) d.tag.remove(); d.el.classList.remove('moving');
+  document.body.classList.remove('dragging'); if (d.over) d.over.classList.remove('drop-ok');
+  suppressClickUntil = Date.now() + 250;
+}
 function endBlockDrag(e){
   const d = bdrag; bdrag = null; if (!d || !d.started) return;
-  d.ghost.remove(); d.tag.remove(); document.body.classList.remove('dragging');
-  if (d.over) d.over.classList.remove('drop-ok');
-  suppressClickUntil = Date.now() + 250;
-  const t = e && dropTargetAt(e.clientX, e.clientY), tk = t && (t.dataset.col || t.dataset.wk);
-  if (tk && tk !== d.k) copyEntry(d.k, d.id, tk, !!(e && e.altKey));
+  cleanBlockDrag(d);
+  if (!e || !d.tk || d.ns == null) return;
+  if (d.tk === d.k && d.ns === d.s0) return;
+  moveEntry(d.k, d.id, d.tk, d.ns, !!e.altKey);
 }
-function copyEntry(sk, id, tk, move){
+function moveEntry(sk, id, tk, ns, copy){
   const sd = S.days.get(sk), src = sd && sd.entries.find(x => x.id === id); if (!src) return;
-  const keys = move ? [sk, tk] : [tk], before = snapshotDays(keys);
-  const td = getDay(tk); td.entries = subtractRange(td.entries, src.s, src.e); td.entries.push({...clone(src), id:rid()}); td.entries.sort((a,b) => a.s - b.s);
-  if (move){ const s2 = getDay(sk); s2.entries = s2.entries.filter(x => x.id !== id); }
-  commit(keys, before, `${move ? 'Spostato' : 'Copiato'} su ${dayTitle(tk).toLowerCase()} · ${fmtT(src.s)}–${fmtT(src.e)}`);
+  const keys = [...new Set(copy ? [tk] : [sk, tk])], before = snapshotDays(keys), dur = src.e - src.s;
+  const ne = {...clone(src), id:rid(), s:ns, e:ns + dur};
+  if (!copy){ const s2 = getDay(sk); s2.entries = s2.entries.filter(x => x.id !== id); }
+  const td = getDay(tk); td.entries.push(ne); td.entries.sort((a,b) => a.s - b.s);
+  commit(keys, before, `${copy ? 'Copiato' : 'Spostato'} su ${dayTitle(tk).toLowerCase()} · ${fmtT(ne.s)}–${fmtT(ne.e)}`);
+}
+let rdrag = null;
+function endResize(cancel){
+  const d = rdrag; rdrag = null; if (!d) return;
+  document.body.classList.remove('resizing'); if (d.tag) d.tag.remove();
+  const changed = d.s !== d.s0 || d.e !== d.e0;
+  if (d.moved) suppressClickUntil = Date.now() + 250;
+  if (cancel || !changed){ if (changed) render(); return; }
+  const before = snapshotDays([d.k]), day = getDay(d.k), x = day.entries.find(z => z.id === d.id); if (!x) return;
+  const others = day.entries.filter(z => z.id !== d.id);
+  x.s = d.s; x.e = d.e; day.entries = [...others, x].sort((a,b) => a.s - b.s);
+  commit([d.k], before, `${fmtT(d.s)}–${fmtT(d.e)} · ${fmtHM((d.e - d.s)/60)}`);
 }
 main.addEventListener('pointerdown', e => {
+  const rz = e.target.closest('[data-rz]');
+  if (rz && e.button === 0){
+    const bl = rz.closest('[data-edit]'), col = bl && bl.closest('.col');
+    if (bl && col){ const [k, id] = bl.dataset.edit.split('|'), x = (S.days.get(k) || {entries:[]}).entries.find(z => z.id === id);
+      if (x){ rdrag = {el:bl, col, k, id, edge:rz.dataset.rz, s:x.s, e:x.e, s0:x.s, e0:x.e, y:e.clientY, moved:false}; document.body.classList.add('resizing'); e.preventDefault(); return; } }
+  }
   const it = e.target.closest('[data-edit]');
   if (it){ if (e.pointerType === 'mouse' && e.button === 0){ const [k, id] = it.dataset.edit.split('|'); bdrag = {el:it, k, id, x:e.clientX, y:e.clientY, started:false}; e.preventDefault(); } return; }
   if (e.button > 0) return;
@@ -1876,21 +2309,51 @@ main.addEventListener('pointerdown', e => {
   if (e.pointerType === 'mouse'){ e.preventDefault(); }
 });
 window.addEventListener('pointermove', e => {
+  if (rdrag){
+    const d = rdrag, st = S.settings, r = d.col.getBoundingClientRect(), v0 = st.viewStart*60, v1 = st.viewEnd*60;
+    if (!d.moved && Math.abs(e.clientY - d.y) < 3) return;
+    d.moved = true;
+    const m = Math.max(v0, Math.min(v1, v0 + Math.round((e.clientY - r.top) / ROW * 60 / SNAP) * SNAP));
+    if (d.edge === 'b') d.e = Math.max(d.s + SNAP, m); else d.s = Math.min(d.e - SNAP, m);
+    const yy = q => (Math.max(v0, Math.min(v1, q)) - v0) / 60 * ROW, top = yy(d.s);
+    d.el.style.top = (top + 1) + 'px'; d.el.style.height = Math.max(12, yy(d.e) - top - 2) + 'px';
+    const tm = d.el.querySelector('.tm'); if (tm) tm.textContent = fmtT(d.s) + '–' + fmtT(d.e);
+    if (!d.tag){ d.tag = document.createElement('div'); d.tag.className = 'ghost-tag'; document.body.appendChild(d.tag); }
+    d.tag.textContent = `${fmtT(d.s)}–${fmtT(d.e)} · ${fmtHM((d.e - d.s)/60)}`;
+    d.tag.style.left = (e.clientX + 14) + 'px'; d.tag.style.top = (e.clientY + 14) + 'px';
+    return;
+  }
   if (bdrag){
     const d = bdrag;
     if (!d.started){
       if (Math.hypot(e.clientX - d.x, e.clientY - d.y) < 6) return;
-      const r = d.el.getBoundingClientRect(); d.ox = e.clientX - r.left; d.oy = Math.min(e.clientY - r.top, 40);
-      d.ghost = d.el.cloneNode(true); d.ghost.classList.add('ghost'); d.ghost.removeAttribute('data-edit');
-      d.ghost.style.width = r.width + 'px'; d.ghost.style.height = Math.min(r.height, 96) + 'px'; d.ghost.style.top = '0'; d.ghost.style.right = 'auto';
+      const x = (S.days.get(d.k) || {entries:[]}).entries.find(z => z.id === d.id); if (!x){ bdrag = null; return; }
+      const r = d.el.getBoundingClientRect();
+      d.dur = x.e - x.s; d.s0 = x.s; d.offM = d.el.classList.contains('blk') ? (d.y - r.top) / ROW * 60 : 0;
+      d.prev = d.el.cloneNode(true); d.prev.classList.add('preview'); d.prev.removeAttribute('data-edit'); d.prev.querySelectorAll('.rz').forEach(z => z.remove());
+      if (!d.prev.classList.contains('blk')){ d.prev.className = 'blk preview'; d.prev.setAttribute('style', d.el.getAttribute('style') || ''); }
       d.tag = document.createElement('div'); d.tag.className = 'ghost-tag';
-      document.body.append(d.ghost, d.tag); document.body.classList.add('dragging'); d.started = true;
+      document.body.append(d.tag); d.el.classList.add('moving'); document.body.classList.add('dragging'); d.started = true;
     }
-    d.ghost.style.left = (e.clientX - d.ox) + 'px'; d.ghost.style.top = (e.clientY - d.oy) + 'px';
-    const t = dropTargetAt(e.clientX, e.clientY), tk = t && (t.dataset.col || t.dataset.wk), ok = tk && tk !== d.k;
+    const st = S.settings, v0 = st.viewStart*60, v1 = st.viewEnd*60;
+    const t = dropTargetAt(e.clientX, e.clientY), tk = t && (t.dataset.col || t.dataset.wk);
     if (d.over && d.over !== t) d.over.classList.remove('drop-ok');
-    if (ok){ t.classList.add('drop-ok'); d.over = t; } else d.over = null;
-    d.tag.textContent = ok ? `${e.altKey ? 'Sposta' : 'Copia'} su ${DOW_S[dow(parseKey(tk))].toLowerCase()} ${parseKey(tk).getDate()}` : 'Rilascia su un altro giorno';
+    d.tk = tk || null; d.ns = null;
+    if (t && t.dataset.col){
+      const r = t.getBoundingClientRect();
+      let ns = v0 + Math.round(((e.clientY - r.top) / ROW * 60 - d.offM) / SNAP) * SNAP;
+      ns = Math.max(0, Math.min(1440 - d.dur, ns)); d.ns = ns;
+      const yy = q => (Math.max(v0, Math.min(v1, q)) - v0) / 60 * ROW, top = yy(ns);
+      Object.assign(d.prev.style, {top:(top + 1) + 'px', height:Math.max(12, yy(ns + d.dur) - top - 2) + 'px', left:'4px', right:'4px', width:'auto'});
+      const tm = d.prev.querySelector('.tm'); if (tm) tm.textContent = fmtT(ns) + '–' + fmtT(ns + d.dur);
+      if (d.prev.parentNode !== t) t.appendChild(d.prev);
+      d.over = null;
+    } else {
+      d.prev.remove();
+      if (t && t.dataset.wk){ d.ns = d.s0; t.classList.add('drop-ok'); d.over = t; } else d.over = null;
+    }
+    const verb = e.altKey ? 'Copia' : 'Sposta';
+    d.tag.textContent = d.ns != null ? `${verb} su ${DOW_S[dow(parseKey(tk))].toLowerCase()} ${parseKey(tk).getDate()} · ${fmtT(d.ns)}–${fmtT(d.ns + d.dur)}` : 'Rilascia su un giorno';
     d.tag.style.left = (e.clientX + 14) + 'px'; d.tag.style.top = (e.clientY + 18) + 'px';
     return;
   }
@@ -1899,8 +2362,8 @@ window.addEventListener('pointermove', e => {
   const m = minuteAt(drag.col, e.clientY);
   if (m !== drag.m1 || Math.abs(e.clientY - drag.y) > 6){ drag.m1 = m; drag.moved = drag.moved || Math.abs(e.clientY - drag.y) > 6; if (drag.moved) showSel(); }
 });
-window.addEventListener('pointerup', e => { if (bdrag) endBlockDrag(e); if (drag) finishSel(); });
-window.addEventListener('pointercancel', () => { if (bdrag) endBlockDrag(null); if (drag){ const sb = drag.col.querySelector('.selbox'); if (sb) sb.hidden = true; } drag = null; });
+window.addEventListener('pointerup', e => { if (rdrag) endResize(false); if (bdrag) endBlockDrag(e); if (drag) finishSel(); });
+window.addEventListener('pointercancel', () => { if (rdrag) endResize(true); if (bdrag) endBlockDrag(null); if (drag){ const sb = drag.col.querySelector('.selbox'); if (sb) sb.hidden = true; } drag = null; });
 main.addEventListener('keydown', e => {
   if (e.key !== 'Enter' && e.key !== ' ') return;
   const s = e.target.closest('.slot'); if (!s) return;
@@ -1909,6 +2372,7 @@ main.addEventListener('keydown', e => {
 main.addEventListener('click', e => {
   if (Date.now() < suppressClickUntil) return;
   const ed = e.target.closest('[data-edit]'); if (ed){ const [k, id] = ed.dataset.edit.split('|'); const x = (S.days.get(k) || {entries:[]}).entries.find(z => z.id === id); if (x) openEntry(k, x.s, x.e, id); return; }
+  const lm = e.target.closest('[data-locmenu]'); if (lm){ locMenu(lm, lm.dataset.locmenu); return; }
   const m = e.target.closest('[data-daymenu]'); if (m){ dayMenu(m, m.dataset.daymenu); return; }
   const aw = e.target.closest('[data-addwk]'); if (aw){ openEntry(aw.dataset.addwk, 600, 720, null); return; }
   const nt = e.target.closest('[data-note]'); if (nt){ openDayDetails(nt.dataset.note); return; }
@@ -1954,6 +2418,7 @@ document.getElementById('moreBtn').onclick = e => openMenu(e.currentTarget, [
   {icon:'add', label:'Nuovo progetto', fn:() => openNewProject()},
   {icon:'table_view', label:'Esporta CSV del periodo', fn:() => exportCSV(false)},
   {icon:'description', label:'Esporta tutto in CSV', fn:() => exportCSV(true)},
+  {icon:'download', label:'Esporta in PDF…', fn:openPdfDialog},
   {icon:'download', label:'Scarica backup completo', fn:backup},
   {icon:'upload', label:'Importa backup', fn:() => document.getElementById('importFile').click()},
   '-',
