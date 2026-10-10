@@ -786,6 +786,25 @@ body.card-dragging,body.card-dragging *{cursor:grabbing!important; user-select:n
 .hd-ic{background:var(--pink-soft); color:var(--on-pink)}
 .btn.filled{background:var(--plum); color:var(--on-plum)}
 .dlg .btn.text:not(.danger){color:var(--on-surface)}
+
+/* v5.0 · ritocchi su stile 4.9 */
+.hint.below{margin:12px 6px 0}
+.btn.lime{background:var(--lav); color:var(--on-lav)}
+.wk-h .num{flex:none; min-width:46px}
+.wk-h.is-wknd .num{width:40px; height:40px; min-width:40px}
+.bal .row b small.gg{font-size:14px; font-weight:650; opacity:.7; font-stretch:100%; letter-spacing:0}
+.sum-leg{flex-wrap:wrap; row-gap:4px}
+.locchip.smart{background:var(--lav); color:var(--on-lav)}
+
+.wk{min-width:726px}
+.wk-scroll{overflow-y:hidden}
+.wk-h .menu-btn{flex:none}
+.wk-h.is-wknd{padding-left:8px; padding-right:6px; container-type:inline-size}
+.wknd{container-type:inline-size}
+.wknd .lbl{overflow:hidden; white-space:nowrap}
+@container (max-width:118px){ .wknd .lbl .ms{display:none} .wknd .lbl{letter-spacing:.2px} }
+@container (max-width:118px){ .wk-h.is-wknd .dn{display:none} .wk-h.is-wknd .top{gap:2px} .wk-h.is-wknd .num{width:38px; height:38px; min-width:38px} }
+.legend + .hint.below{margin-top:8px}
 </style>
 </head>
 <body>
@@ -844,7 +863,7 @@ body.card-dragging,body.card-dragging *{cursor:grabbing!important; user-select:n
 'use strict';
 /* sicurezza: l'app non si apre dentro pagine altrui (protezione da clickjacking) */
 if (window.top !== window.self){ document.body.innerHTML = '<p style="font:16px system-ui;padding:24px">Per sicurezza il Timesheet non può essere aperto dentro un’altra pagina. Aprilo direttamente.</p>'; return; }
-const APP_VERSION = '4.9 · 9 ott 2026';
+const APP_VERSION = '5.1 · 10 ott 2026';
 /* ---------- costanti ---------- */
 const DOW_S = ['Lun','Mar','Mer','Gio','Ven','Sab','Dom'];
 const DOW_L = ['lunedì','martedì','mercoledì','giovedì','venerdì','sabato','domenica'];
@@ -1489,8 +1508,8 @@ function weekHTML(){
   const days = [...Array(7)].map((_,i) => addDays(mon,i));
   const v0 = st.viewStart*60, v1 = st.viewEnd*60, R = st.viewEnd - st.viewStart, H = R*ROW;
   const y = m => (Math.max(v0, Math.min(v1, m)) - v0) / 60 * ROW;
-  let html = `<div class="hint"><span class="ms">touch_app</span>Clicca un'ora o trascina per registrare. Trascina un blocco per spostarlo, anche su un altro giorno (con ⌥ lo copi). Trascina il suo bordo per allungarlo.</div>`;
-  html += `<div class="wk-scroll"><div class="wk" style="grid-template-columns:54px repeat(5,minmax(124px,1fr)) repeat(2,minmax(108px,.7fr));grid-template-rows:auto ${H}px">`;
+  let html = '';
+  html += `<div class="wk-scroll"><div class="wk" style="grid-template-columns:54px repeat(5,minmax(100px,1fr)) repeat(2,minmax(86px,.7fr));grid-template-rows:auto ${H}px">`;
   html += `<div></div>`;
   days.forEach((d, i) => {
     const inf = info(d), ds = dayStats(inf.key), dd = S.days.get(inf.key), isToday = +d === +t0;
@@ -1541,11 +1560,10 @@ function weekHTML(){
     html += col;
   });
   html += `</div></div>`;
-  const used = [...new Set(days.flatMap(d => (S.days.get(keyOf(d)) || {entries:[]}).entries.filter(x => x.t === 'lav').map(x => x.p)))].map(proj).filter(Boolean);
-  html += `<div class="legend">${used.map(p => `<span><i class="sw" style="${pStyle(p)}"></i>${esc(p.name)}</span>`).join('')}
-    ${['ferie','rol','mal'].map(t => `<span class="t-${t}"><i class="sw"></i>${TYPES[t].label}</span>`).join('')}
+  html += `<div class="legend">${['ferie','rol','mal'].map(t => `<span class="t-${t}"><i class="sw"></i>${TYPES[t].label}</span>`).join('')}
     <span style="--bg:var(--hol-head)"><i class="sw"></i>Festivo</span><span style="--bg:var(--wknd-bg)"><i class="sw"></i>Weekend</span>
     <span style="--bg:var(--off-bg)"><i class="sw"></i>Fuori orario</span></div>`;
+  html += `<div class="hint below"><span class="ms">touch_app</span>Clicca un'ora o trascina per registrare. Trascina un blocco per spostarlo, anche su un altro giorno (con ⌥ lo copi). Trascina il suo bordo per allungarlo.</div>`;
   return html;
 }
 function monthHTML(){
@@ -1655,7 +1673,7 @@ function renderPane(){
   html += `<section class="card white sum"><h3 class="t-title-m">Riepilogo ${pName}</h3>
     <div class="sum-main"><span class="k">Ore lavorate</span><span class="v">${kvHM(r.lav)}</span><span class="of">su ${fmtHM(r.expected)} previste</span></div>
     <div class="sum-bar" aria-hidden="true"><i class="lav" style="width:${r.lav/den*100}%"></i>${absH ? `<i class="abs" style="width:${absH/den*100}%"></i>` : ''}</div>
-    ${absH ? `<div class="sum-leg"><span><i class="lav"></i>Lavoro ${fmtHM(r.lav)}</span><span><i class="abs"></i>Assenze ${fmtHM(absH)}</span></div>` : ''}
+    ${absH ? `<div class="sum-leg"><span><i class="lav"></i>Lavoro ${fmtHM(r.lav)}</span><span><i class="abs"></i>Assenze: ${[r.ferie ? `ferie ${fmtN(r.ferie/dh)} gg` : '', r.rol ? `ROL ${fmtHM(r.rol)}` : '', r.mal ? `malattia ${fmtN(r.mal/dh)} gg` : '', r.perm ? `permessi ${fmtHM(r.perm)}` : ''].filter(Boolean).join(' · ')}</span></div>` : ''}
     ${r.missing ? `<div class="sum-status warn"><span class="ms">error</span><span>Da compilare: <b>${fmtHM(r.missing)}</b> in ${r.missDays} ${r.missDays === 1 ? 'giorno' : 'giorni'}</span></div>`
       : pastWd ? `<div class="sum-status ok"><span class="ms">check</span><span>Tutto compilato</span></div>` : ''}
     <dl class="sum-list"><div><dt>Giorni lavorati</dt><dd>${r.worked} <span>di ${r.workdays}</span></dd></div><div><dt>Oltre l'orario</dt><dd>${r.over ? fmtHM(r.over) : '—'}</dd></div></dl>
@@ -1666,19 +1684,19 @@ function renderPane(){
       !st.projects.some(activeP) ? `<span class="muted">Non hai ancora progetti. Creane uno per iniziare a registrare le ore.</span>` : `<span class="muted">Nessuna ora registrata in questo periodo.</span>`}
   </section>`;
   html += `<section class="card white"><h3 class="t-title-m">Assenze ${pName}</h3><div class="abs-grid">
-    ${['ferie','rol','mal'].map(t => `<div class="abs-it t-${t}"><span class="ms">${TYPES[t].icon}</span><div><b>${t === 'ferie' || t === 'mal' ? fmtN(r[t]/dh) + ' gg' : fmtHM(r[t])}</b><span>${TYPES[t].label}${t === 'ferie' || t === 'mal' ? ' · ' + fmtHM(r[t]) : ''}</span></div></div>`).join('')}
+    ${['ferie','rol','mal'].map(t => `<div class="abs-it t-${t}"><span class="ms">${TYPES[t].icon}</span><div><b>${t === 'rol' ? fmtHM(r[t]) : fmtN(r[t]/dh) + ' gg'}</b><span>${TYPES[t].label}${t === 'rol' ? ' · ' + fmtN(r[t]/dh) + ' gg' : ''}</span></div></div>`).join('')}
   </div></section>`;
   const LB = leaveBalance(), F = LB.F, Rr = LB.R, pct = (u, tot) => Math.max(0, Math.min(100, tot > 0 ? u/tot*100 : 0));
   html += `<section class="card ink"><div class="ch"><h3 class="t-title-m">Saldo ferie e ROL</h3><button class="btn text sm sl" data-act="leave">Modifica</button></div>
     <span class="t-body-s">${LB.mode === 'busta' ? `Dalla busta paga al ${fmtDate(LB.from)}, con maturazione mensile` : `Nessun saldo da busta paga: conteggio sul ${LB.y}`}</span>
     <div class="bal"><div class="row"><span>Ferie residue oggi</span><b class="${F.now < 0 ? 'neg' : ''}">${fmtN(F.now/dh)} gg</b></div>
       <div class="lp"><i style="width:${pct(F.used, F.base + F.acc)}%"></i></div>
-      <span class="sub">${fmtHM(F.now)} · ${LB.mode === 'busta' ? 'busta paga' : 'spettanza'} ${fmtN(F.base/dh)} gg${F.acc ? ` + maturate ${fmtN(F.acc/dh)}` : ''} − godute ${fmtN(F.used/dh)}</span>
+      <span class="sub">${LB.mode === 'busta' ? 'busta paga' : 'spettanza'} ${fmtN(F.base/dh)} gg${F.acc ? ` + maturate ${fmtN(F.acc/dh)}` : ''} − godute ${fmtN(F.used/dh)}</span>
       <span class="fut">${F.plan ? `Pianificate ${fmtN(F.plan/dh)} gg · ` : ''}a fine ${LB.y}: ${fmtN(F.eoy/dh)} gg</span></div>
-    <div class="bal"><div class="row"><span>ROL residui oggi</span><b class="${Rr.now < 0 ? 'neg' : ''}">${fmtHM(Rr.now)}</b></div>
+    <div class="bal"><div class="row"><span>ROL residui oggi</span><b class="${Rr.now < 0 ? 'neg' : ''}">${fmtHM(Rr.now)} <small class="gg">${fmtN(Rr.now/dh)} gg</small></b></div>
       <div class="lp"><i style="width:${pct(Rr.used, Rr.base + Rr.acc)}%"></i></div>
-      <span class="sub">${LB.mode === 'busta' ? 'busta paga' : 'spettanza'} ${fmtHM(Rr.base)}${Rr.acc ? ` + maturati ${fmtHM(Rr.acc)}` : ''} − goduti ${fmtHM(Rr.used)}</span>
-      <span class="fut">${Rr.plan ? `Pianificati ${fmtHM(Rr.plan)} · ` : ''}a fine ${LB.y}: ${fmtHM(Rr.eoy)}</span></div>
+      <span class="sub">${LB.mode === 'busta' ? 'busta paga' : 'spettanza'} ${fmtHM(Rr.base)} (${fmtN(Rr.base/dh)} gg)${Rr.acc ? ` + maturati ${fmtHM(Rr.acc)}` : ''} − goduti ${fmtHM(Rr.used)}</span>
+      <span class="fut">${Rr.plan ? `Pianificati ${fmtHM(Rr.plan)} · ` : ''}a fine ${LB.y}: ${fmtHM(Rr.eoy)} (${fmtN(Rr.eoy/dh)} gg)</span></div>
     ${LB.mode !== 'busta' ? `<div><button class="btn lime sm sl has-icon" data-act="leave"><span class="ms">edit</span>Imposta saldo da busta paga</button></div>` : ''}
   </section>`;
   const t0 = today0(), next = [];
@@ -2166,7 +2184,7 @@ function printReport(a, b){
   const projLine = bp => Object.entries(bp).sort((x,z) => z[1]-x[1]).map(([pid, v]) => `<span class="pr-p" style="${projStyle(pid)}"><i></i>${esc(projName(pid))} <b>${fmtHM(v)}</b></span>`).join('');
   const box = (k, v) => `<div class="pr-k"><span>${k}</span><b>${v}</b></div>`;
   let h = `<div class="pr"><header class="pr-h"><div><h1>Timesheet</h1><p>${wkRange(s0, e0)}</p></div><p class="pr-gen">Creato il ${longD(t0)}</p></header>
-    <section class="pr-tot">${box('Ore lavorate', fmtHM(tot.lav))}${box('Giorni lavorati', `${tot.worked} di ${tot.workdays}`)}${box('Ferie', `${fmtN(tot.ferie/dh)} gg`)}${box('ROL', fmtHM(tot.rol))}${box('Malattia', `${fmtN(tot.mal/dh)} gg`)}${box('In sede', `${locN.uff} gg`)}${box('Smart working', `${locN.smart} gg`)}${locN.tras ? box('Trasferta', `${locN.tras} gg`) : ''}</section>
+    <section class="pr-tot">${box('Ore lavorate', fmtHM(tot.lav))}${box('Giorni lavorati', `${tot.worked} di ${tot.workdays}`)}${box('Ferie', `${fmtN(tot.ferie/dh)} gg`)}${box('ROL', `${fmtHM(tot.rol)} · ${fmtN(tot.rol/dh)} gg`)}${box('Malattia', `${fmtN(tot.mal/dh)} gg`)}${box('In sede', `${locN.uff} gg`)}${box('Smart working', `${locN.smart} gg`)}${locN.tras ? box('Trasferta', `${locN.tras} gg`) : ''}</section>
     ${Object.keys(tot.byProj).length ? `<section class="pr-projs"><span class="pr-lbl">Ore per progetto</span>${projLine(tot.byProj)}</section>` : ''}`;
   for (let w = new Date(s0); w <= e0; w = addDays(w,7)){
     const we = addDays(w,6), r = rangeStats(w, we), absH = r.ferie + r.rol + r.mal + r.perm;
