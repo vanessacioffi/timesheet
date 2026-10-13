@@ -805,6 +805,47 @@ body.card-dragging,body.card-dragging *{cursor:grabbing!important; user-select:n
 @container (max-width:118px){ .wknd .lbl .ms{display:none} .wknd .lbl{letter-spacing:.2px} }
 @container (max-width:118px){ .wk-h.is-wknd .dn{display:none} .wk-h.is-wknd .top{gap:2px} .wk-h.is-wknd .num{width:38px; height:38px; min-width:38px} }
 .legend + .hint.below{margin-top:8px}
+
+/* ===== v5.2 · colori progetto: sfondi tenui, testo ad alto contrasto, accento per i piccoli segni ===== */
+:root{
+  --c0-bg:#DCD8FF; --c0-fg:#1A1270; --c0-ac:#5B4BE0;
+  --c1-bg:#CDEFFB; --c1-fg:#00394A; --c1-ac:#0096C7;
+  --c2-bg:#E6F5B0; --c2-fg:#2B3500; --c2-ac:#86A800;
+  --c3-bg:#FFE6B3; --c3-fg:#4A2E00; --c3-ac:#E09B00;
+  --c4-bg:#FFD6E8; --c4-fg:#5C0030; --c4-ac:#E8458F;
+  --c5-bg:#CDEFD9; --c5-fg:#00391B; --c5-ac:#23A85E;
+  --c6-bg:#E8DEFF; --c6-fg:#2E1A7A; --c6-ac:#8C6CF0;
+  --c7-bg:#E2E0E6; --c7-fg:#1D1B20; --c7-ac:#5D5966;
+  --c8-bg:#FFDCCB; --c8-fg:#5A1F00; --c8-ac:#F06A2A;
+  --c9-bg:#C8EEE8; --c9-fg:#00332D; --c9-ac:#0E9C8C;
+  --c10-bg:#D3E2FF; --c10-fg:#0A2A6B; --c10-ac:#2F6FED;
+  --c11-bg:#FFD7DB; --c11-fg:#650015; --c11-ac:#DB2F48;
+  --c12-bg:#E1EECB; --c12-fg:#233300; --c12-ac:#6E9A2A;
+  --c13-bg:#EBDDD6; --c13-fg:#3E2419; --c13-ac:#8D6E63;
+  --c14-bg:#F0D9FA; --c14-fg:#4A0E66; --c14-ac:#A23ACF;
+  --c15-bg:#DDE5EC; --c15-fg:#1B2A36; --c15-ac:#64798C;
+}
+@media (prefers-color-scheme: dark){ :root:not([data-theme="light"]){
+  --c0-bg:#2F2A6E; --c0-fg:#E1DDFF; --c1-bg:#0D3B4A; --c1-fg:#C9F0FF; --c2-bg:#34400A; --c2-fg:#E3F5A8; --c3-bg:#4A3500; --c3-fg:#FFE3A8;
+  --c4-bg:#5A1A3A; --c4-fg:#FFD8EA; --c5-bg:#0E3F25; --c5-fg:#C6F0D6; --c6-bg:#3A2C6E; --c6-fg:#E8DEFF; --c7-bg:#34313A; --c7-fg:#E8E6EC;
+  --c8-bg:#5A2810; --c8-fg:#FFDCCB; --c9-bg:#0B3D37; --c9-fg:#C2EEE7; --c10-bg:#1A3466; --c10-fg:#D5E3FF; --c11-bg:#5E1A24; --c11-fg:#FFD8DC;
+  --c12-bg:#2F3D14; --c12-fg:#DEEDC4; --c13-bg:#45302A; --c13-fg:#EEDFD8; --c14-bg:#4A1E5E; --c14-fg:#F2DAFB; --c15-bg:#2A3540; --c15-fg:#DCE5EC; }}
+:root[data-theme="dark"]{
+  --c0-bg:#2F2A6E; --c0-fg:#E1DDFF; --c1-bg:#0D3B4A; --c1-fg:#C9F0FF; --c2-bg:#34400A; --c2-fg:#E3F5A8; --c3-bg:#4A3500; --c3-fg:#FFE3A8;
+  --c4-bg:#5A1A3A; --c4-fg:#FFD8EA; --c5-bg:#0E3F25; --c5-fg:#C6F0D6; --c6-bg:#3A2C6E; --c6-fg:#E8DEFF; --c7-bg:#34313A; --c7-fg:#E8E6EC;
+  --c8-bg:#5A2810; --c8-fg:#FFDCCB; --c9-bg:#0B3D37; --c9-fg:#C2EEE7; --c10-bg:#1A3466; --c10-fg:#D5E3FF; --c11-bg:#5E1A24; --c11-fg:#FFD8DC;
+  --c12-bg:#2F3D14; --c12-fg:#DEEDC4; --c13-bg:#45302A; --c13-fg:#EEDFD8; --c14-bg:#4A1E5E; --c14-fg:#F2DAFB; --c15-bg:#2A3540; --c15-fg:#DCE5EC; }
+/* piccoli segni (pallini, barre, bordo del selettore): colore d'accento pieno */
+.plist .dot,.plist .tr i,.mc .bar2 i,.colorbtn{background:var(--ac, var(--bg))}
+@media print{ .pr-p i,.pr-sw{background:var(--ac, var(--bg, #999))} }
+/* selettore colore del progetto */
+.colorbtn[aria-expanded="true"]{box-shadow:0 0 0 3px var(--surface-lowest), 0 0 0 5px var(--on-surface)}
+.ppick{display:grid; grid-template-columns:repeat(8, 1fr); gap:8px; padding:12px; margin:-2px 0 6px; border-radius:var(--shape-l); background:var(--surface-container)}
+.ppick .swb{width:100%; height:auto; aspect-ratio:1; max-width:44px; justify-self:center; box-shadow:inset 0 0 0 2px var(--ac)}
+.ppick .swb .aa{font-size:13px; font-weight:750}
+.ppick .swb .ms{font-size:20px}
+.swatches .swb{box-shadow:inset 0 0 0 2px var(--ac)}
+.ppick .swb[aria-pressed="true"],.swatches .swb[aria-pressed="true"]{border-radius:var(--shape-m); box-shadow:inset 0 0 0 2px var(--ac), 0 0 0 3px var(--surface-lowest), 0 0 0 5px var(--on-surface)}
 </style>
 </head>
 <body>
@@ -863,7 +904,7 @@ body.card-dragging,body.card-dragging *{cursor:grabbing!important; user-select:n
 'use strict';
 /* sicurezza: l'app non si apre dentro pagine altrui (protezione da clickjacking) */
 if (window.top !== window.self){ document.body.innerHTML = '<p style="font:16px system-ui;padding:24px">Per sicurezza il Timesheet non può essere aperto dentro un’altra pagina. Aprilo direttamente.</p>'; return; }
-const APP_VERSION = '5.1 · 10 ott 2026';
+const APP_VERSION = '5.2 · 10 ott 2026';
 /* ---------- costanti ---------- */
 const DOW_S = ['Lun','Mar','Mer','Gio','Ven','Sab','Dom'];
 const DOW_L = ['lunedì','martedì','mercoledì','giovedì','venerdì','sabato','domenica'];
@@ -983,7 +1024,7 @@ function getDay(k){ let d = S.days.get(k); if (!d){ d = normDay(null,k); S.days.
 const proj = id => S.settings.projects.find(p => p.id === id);
 const activeP = p => p && !p.archived && !p.deleted;
 const colorIdx = p => ((p && +p.color) || 0) % NCOL;
-const cStyle = c => `--bg:var(--c${c}-bg);--fg:var(--c${c}-fg)`;
+const cStyle = c => `--bg:var(--c${c}-bg);--fg:var(--c${c}-fg);--ac:var(--c${c}-ac)`;
 const pStyle = p => cStyle(colorIdx(p));
 const lunchS = () => S.settings.lunchStart, lunchE = () => S.settings.lunchEnd;
 
@@ -2040,11 +2081,12 @@ function openSettings(focus){
       return `<div class="pdel"><span>Eliminare «${esc(p.name || 'senza nome')}»? ${h ? `Le ${fmtHM(h)} già registrate restano nello storico e nei riepiloghi, col suo nome.` : 'Non ha ore registrate.'}</span>
         <button type="button" class="btn text sl" data-pno="${i}">Annulla</button><button type="button" class="btn filled sl" data-pyes="${i}">Elimina</button></div>`; }
     return `<div class="prow${p.archived ? ' arch' : ''}">
-      <button type="button" class="colorbtn sl" data-pc="${i}" style="${pStyle(p)}" aria-label="Cambia colore" title="Cambia colore"></button>
+      <button type="button" class="colorbtn sl" data-pc="${i}" style="${pStyle(p)}" aria-label="Cambia colore" title="Scegli il colore" aria-expanded="${!!p._pick}"></button>
       <div class="tf"><label>Nome</label><input data-pn="${i}" value="${esc(p.name)}" maxlength="60"></div>
       <span class="tag-arch">${p.archived ? 'Archiviato' : ''}</span>
       <button type="button" class="ibtn sl" data-pa="${i}" aria-label="${p.archived ? 'Ripristina' : 'Archivia'}" title="${p.archived ? 'Ripristina' : 'Archivia (resta nello storico)'}"><span class="ms">${p.archived ? 'unarchive' : 'archive'}</span></button>
-      <button type="button" class="ibtn sl" data-pd="${i}" aria-label="Elimina progetto" title="Elimina progetto"><span class="ms">delete</span></button></div>`;
+      <button type="button" class="ibtn sl" data-pd="${i}" aria-label="Elimina progetto" title="Elimina progetto"><span class="ms">delete</span></button></div>${p._pick ? `
+      <div class="ppick" role="group" aria-label="Colore di ${esc(p.name || 'progetto')}">${[...Array(NCOL)].map((_,c) => `<button type="button" class="swb sl" data-pcc="${i}|${c}" style="${cStyle(c)}" aria-pressed="${c === colorIdx(p)}" aria-label="Colore ${c+1}"><span class="aa">${c === colorIdx(p) ? '<span class="ms">check</span>' : 'Aa'}</span></button>`).join('')}</div>` : ''}`;
   };
   const numF = (id, label, val, attrs, sup) => `<div class="tf"><label for="${id}">${label}</label><input id="${id}" type="number" value="${val}" ${attrs}>${sup ? `<span class="sup">${sup}</span>` : ''}</div>`;
   const timeF = (id, label, val) => `<div class="tf"><label for="${id}">${label}</label><input id="${id}" type="time" step="60" value="${fmtT(val)}"></div>`;
@@ -2085,7 +2127,8 @@ function openSettings(focus){
       root.querySelectorAll('[data-pd]').forEach(b => b.onclick = () => { readP(); st.projects[+b.dataset.pd]._ask = true; drawP(); });
       root.querySelectorAll('[data-pno]').forEach(b => b.onclick = () => { delete st.projects[+b.dataset.pno]._ask; drawP(); });
       root.querySelectorAll('[data-pyes]').forEach(b => b.onclick = () => { const p = st.projects[+b.dataset.pyes]; delete p._ask; p._del = true; drawP(); snack(`«${p.name || 'Progetto'}» verrà eliminato quando salvi`); });
-      root.querySelectorAll('[data-pc]').forEach(b => b.onclick = () => { const p = st.projects[+b.dataset.pc]; p.color = (colorIdx(p) + 1) % NCOL; b.setAttribute('style', pStyle(p)); });
+      root.querySelectorAll('[data-pc]').forEach(b => b.onclick = () => { readP(); const p = st.projects[+b.dataset.pc], open = !p._pick; st.projects.forEach(q => delete q._pick); if (open) p._pick = true; drawP(); });
+      root.querySelectorAll('[data-pcc]').forEach(b => b.onclick = () => { readP(); const [i, c] = b.dataset.pcc.split('|').map(Number), p = st.projects[i]; p.color = c; delete p._pick; drawP(); const nb = root.querySelector(`[data-pc="${i}"]`); if (nb) nb.focus(); });
       root.querySelectorAll('[data-pa]').forEach(b => b.onclick = () => { readP(); const p = st.projects[+b.dataset.pa]; p.archived = !p.archived; drawP(); });
     };
     drawP();
@@ -2106,7 +2149,7 @@ function openSettings(focus){
       else if (!(dhm > 0)) err = 'Indica le ore contrattuali al giorno.';
       if (err){ $('#sErr').textContent = err; $('#sErr').hidden = false; $('#sErr').scrollIntoView({block:'center'}); return; }
       st.projects = st.projects.filter(p => p.name.trim() || p.deleted).map(p => {
-        const q = {...p, name:p.name.trim()}; delete q._ask;
+        const q = {...p, name:p.name.trim()}; delete q._ask; delete q._pick;
         if (q._del){ delete q._del; if (!projHours(q.id)) return null; q.deleted = true; q.archived = false; }
         return q;
       }).filter(Boolean);
