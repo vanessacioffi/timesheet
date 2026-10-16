@@ -182,7 +182,7 @@ main,aside{min-width:0}
 
 /* week view */
 .wk-scroll{overflow-x:auto; background:var(--surface-lowest); border-radius:var(--shape-xl); box-shadow:0 0 0 1px var(--outline-variant)}
-.wk{display:grid; min-width:880px}
+.wk-scroll > .wk{display:grid; min-width:880px}
 .wk-h{padding:10px 10px 10px; border-left:1px solid var(--grid-line); display:flex; flex-direction:column; gap:4px; min-width:0; position:relative}
 .wk-h .top{display:flex; align-items:center; gap:6px}
 .wk-h .dn{font-size:12px; font-weight:750; letter-spacing:.8px; text-transform:uppercase}
@@ -796,7 +796,7 @@ body.card-dragging,body.card-dragging *{cursor:grabbing!important; user-select:n
 .sum-leg{flex-wrap:wrap; row-gap:4px}
 .locchip.smart{background:var(--lav); color:var(--on-lav)}
 
-.wk{min-width:726px}
+.wk-scroll > .wk{min-width:726px}
 .wk-scroll{overflow-y:hidden}
 .wk-h .menu-btn{flex:none}
 .wk-h.is-wknd{padding-left:8px; padding-right:6px; container-type:inline-size}
@@ -1078,6 +1078,30 @@ body.card-dragging,body.card-dragging *{cursor:grabbing!important; user-select:n
 .t-chiu{--bg:var(--chiu-bg); --fg:var(--chiu-fg)}
 .chip[data-type="chiu"][aria-pressed="true"]{background:var(--chiu-bg); color:var(--chiu-fg)}
 .abs-it .subn{display:block; font-size:11px; line-height:14px; opacity:.85}
+
+/* ===== v5.13 ===== */
+.fab.docked{justify-content:center; border-radius:var(--shape-xl); height:60px}
+.fab.docked:hover{border-radius:var(--shape-xl)}
+@media (max-width:1120px){ .pane{padding-bottom:0} }
+/* gerarchia dei testi: 1) numeri chiave, 2) nomi e titoli, 3) note di contorno */
+.card .t-title-m{font-size:15px; line-height:20px; font-weight:750; letter-spacing:.1px; color:var(--on-surface)}
+.rleg li span{font-size:13.5px; font-weight:500; color:var(--on-surface)}
+.rleg li b{font-size:17px; line-height:20px; font-weight:850; font-stretch:68%; letter-spacing:-.1px}
+.ring .rc b{font-size:24px; line-height:26px}
+.ring .rc span{font-size:11.5px}
+.plist .nm{font-size:14px; font-weight:600; color:var(--on-surface)}
+.plist .hv{font-size:17px; line-height:20px; font-weight:850; font-stretch:68%}
+.abs-it b{font-size:24px; line-height:26px; font-weight:850; font-stretch:64%; white-space:nowrap}
+.ring-wrap{gap:16px}
+.abs-it div span{font-size:12px; font-weight:550}
+.bal3 .k{font-size:15px; line-height:20px}
+.bal3 .c,.bal3 .bf{font-size:12px}
+.hlist .tx > :first-child{font-size:14px; font-weight:650; color:var(--on-surface)}
+.hlist .tx > :not(:first-child){font-size:12px; color:var(--on-surface-variant)}
+.legend,.hint.below{color:var(--on-surface-variant)}
+
+/* ===== v5.13 · pulsante Registra ore allineato al margine destro dei riquadri ===== */
+.fab{right:max(16px, calc((100vw - 1712px) / 2 + 16px))}
 </style>
 </head>
 <body>
@@ -1138,7 +1162,7 @@ body.card-dragging,body.card-dragging *{cursor:grabbing!important; user-select:n
 'use strict';
 /* sicurezza: l'app non si apre dentro pagine altrui (protezione da clickjacking) */
 if (window.top !== window.self){ document.body.innerHTML = '<p style="font:16px system-ui;padding:24px">Per sicurezza il Timesheet non può essere aperto dentro un’altra pagina. Aprilo direttamente.</p>'; return; }
-const APP_VERSION = '5.12 · 16 ott 2026';
+const APP_VERSION = '5.14 · 16 ott 2026';
 /* ---------- costanti ---------- */
 const DOW_S = ['Lun','Mar','Mer','Gio','Ven','Sab','Dom'];
 const DOW_L = ['lunedì','martedì','mercoledì','giovedì','venerdì','sabato','domenica'];
@@ -1759,7 +1783,15 @@ function snack(text, action, fn){
 }
 
 /* ---------- render ---------- */
-function render(){ renderTop(); renderMain(); renderPane(); }
+function render(){ renderTop(); renderMain(); renderPane(); placeFab(); }
+/* «Registra ore»: larghezza sul contenuto, bordo destro allineato ai riquadri */
+function placeFab(){
+  const f = document.getElementById('fab'), pn = document.getElementById('pane'); if (!f || !pn) return;
+  f.classList.remove('docked'); f.style.left = ''; f.style.width = '';
+  const r = pn.getBoundingClientRect(), vw = document.documentElement.clientWidth;
+  f.style.right = (window.innerWidth > 1120 && r.width > 0) ? Math.round(vw - r.right) + 'px' : '';
+}
+window.addEventListener('resize', placeFab);
 function renderTop(){
   const [a, b] = periodRange(); let label, sub;
   if (S.view === 'week'){
