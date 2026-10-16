@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self' 'unsafe-inline'; worker-src 'self'; manifest-src 'self'; style-src 'unsafe-inline'; font-src data:; img-src 'self' data: blob:; connect-src 'none'; object-src 'none'; media-src 'none'; frame-src 'none'; base-uri 'none'; form-action 'none'">
 <link rel="manifest" href="manifest.webmanifest">
-<meta name="theme-color" content="#E7DDFB">
+<meta name="theme-color" content="#FFFFFF">
 <meta name="referrer" content="no-referrer">
 <meta name="robots" content="noindex, nofollow, noarchive">
 <link rel="icon" type="image/png" href="icon-192.png">
@@ -1070,6 +1070,14 @@ body.card-dragging,body.card-dragging *{cursor:grabbing!important; user-select:n
 .bar #moreBtn .ms{font-size:26px; width:26px; height:26px}
 .bar #moreBtn:hover,.bar #moreBtn:focus-visible{background:var(--tb-hover)}
 .bar .today-btn:focus-visible,.bar .actions .ibtn:focus-visible{background:var(--tb-hover)}
+
+/* ===== v5.12 · chiusura aziendale ===== */
+:root{--chiu-bg:#D6E4F0; --chiu-fg:#1B3A52}
+@media (prefers-color-scheme: dark){ :root:not([data-theme="light"]){--chiu-bg:#22384A; --chiu-fg:#D6E4F0} }
+:root[data-theme="dark"]{--chiu-bg:#22384A; --chiu-fg:#D6E4F0}
+.t-chiu{--bg:var(--chiu-bg); --fg:var(--chiu-fg)}
+.chip[data-type="chiu"][aria-pressed="true"]{background:var(--chiu-bg); color:var(--chiu-fg)}
+.abs-it .subn{display:block; font-size:11px; line-height:14px; opacity:.85}
 </style>
 </head>
 <body>
@@ -1130,7 +1138,7 @@ body.card-dragging,body.card-dragging *{cursor:grabbing!important; user-select:n
 'use strict';
 /* sicurezza: l'app non si apre dentro pagine altrui (protezione da clickjacking) */
 if (window.top !== window.self){ document.body.innerHTML = '<p style="font:16px system-ui;padding:24px">Per sicurezza il Timesheet non può essere aperto dentro un’altra pagina. Aprilo direttamente.</p>'; return; }
-const APP_VERSION = '5.10 · 16 ott 2026';
+const APP_VERSION = '5.12 · 16 ott 2026';
 /* ---------- costanti ---------- */
 const DOW_S = ['Lun','Mar','Mer','Gio','Ven','Sab','Dom'];
 const DOW_L = ['lunedì','martedì','mercoledì','giovedì','venerdì','sabato','domenica'];
@@ -1139,6 +1147,7 @@ const MON_S = ['gen','feb','mar','apr','mag','giu','lug','ago','set','ott','nov'
 const TYPES = {
   lav:   {label:'Lavoro',   icon:'work'},
   ferie: {label:'Ferie',    icon:'beach_access'},
+  chiu:  {label:'Chiusura aziendale', short:'Chiusura', icon:'lock'},
   rol:   {label:'ROL',      icon:'more_time'},
   perm:  {label:'Permesso', icon:'event_busy', hidden:true},
   mal:   {label:'Malattia', icon:'medical_services'}
@@ -1255,13 +1264,13 @@ const pStyle = p => cStyle(colorIdx(p));
 const lunchS = () => S.settings.lunchStart, lunchE = () => S.settings.lunchEnd;
 
 function dayStats(k){
-  const st = {lav:0, ferie:0, rol:0, perm:0, mal:0, total:0, byProj:{}};
+  const st = {lav:0, ferie:0, chiu:0, rol:0, perm:0, mal:0, total:0, byProj:{}};
   const d = S.days.get(k); if (!d || !d.entries.length) return st;
   const xs = d.entries, pts = [...new Set(xs.flatMap(x => [x.s, x.e]))].sort((a,b) => a - b);
   for (let i = 0; i < pts.length - 1; i++){
     const a = pts[i], b = pts[i+1], act = xs.filter(x => x.s <= a && x.e >= b); if (!act.length) continue;
     const h = (b - a) / 60 / act.length; // le ore in contemporanea si dividono tra le voci
-    for (const x of act){ st[x.t] += h; st.total += h; if (x.t === 'lav'){ const k2 = x.p || NONE_KEY; st.byProj[k2] = (st.byProj[k2]||0) + h; } }
+    for (const x of act){ st[x.t] += h; st.total += h; if (x.t === 'chiu') st.ferie += h; /* la chiusura aziendale conta come ferie */ if (x.t === 'lav'){ const k2 = x.p || NONE_KEY; st.byProj[k2] = (st.byProj[k2]||0) + h; } }
   }
   return st;
 }
@@ -1277,7 +1286,7 @@ function laneMap(xs){
 }
 function rangeStats(from, to){
   const t0 = today0(), dh = S.settings.dailyHours;
-  const r = {lav:0, ferie:0, rol:0, perm:0, mal:0, total:0, byProj:{}, workdays:0, expected:0, missing:0, missDays:0, worked:0, over:0};
+  const r = {lav:0, ferie:0, chiu:0, rol:0, perm:0, mal:0, total:0, byProj:{}, workdays:0, expected:0, missing:0, missDays:0, worked:0, over:0};
   for (let d = new Date(from); d <= to; d = addDays(d,1)){
     const i = info(d), st = dayStats(i.key);
     for (const t of Object.keys(TYPES)) r[t] += st[t];
@@ -1828,7 +1837,7 @@ function weekHTML(){
     html += col;
   });
   html += `</div></div>`;
-  html += `<div class="legend">${['ferie','rol','mal'].map(t => `<span class="t-${t}"><i class="sw"></i>${TYPES[t].label}</span>`).join('')}
+  html += `<div class="legend">${['ferie','chiu','rol','mal'].map(t => `<span class="t-${t}"><i class="sw"></i>${TYPES[t].label}</span>`).join('')}
     <span style="--bg:var(--hol-head)"><i class="sw"></i>Festivo</span><span style="--bg:var(--wknd-bg)"><i class="sw"></i>Weekend</span>
     <span style="--bg:var(--off-bg)"><i class="sw"></i>Fuori orario</span></div>`;
   html += `<div class="hint below"><span class="ms">touch_app</span>Clicca un'ora o trascina per registrare. Trascina un blocco per spostarlo, anche su un altro giorno (con ⌥ lo copi). Trascina il suo bordo per allungarlo.</div>`;
@@ -1845,8 +1854,9 @@ function monthHTML(){
     const cls = ['mc','sl', out?'out':'', inf.weekend && !inf.hol ?'wk':'', inf.hol?'hol':'', +d === +t0 ? 'today':''].join(' ');
     const den = Math.max(ds.total, st.dailyHours), segs = [];
     for (const [p,v] of Object.entries(ds.byProj)) segs.push(`<i style="width:${v/den*100}%;${projStyle(p)}"></i>`);
-    for (const t of ['ferie','rol','perm','mal']) if (ds[t]) segs.push(`<i class="t-${t}" style="width:${ds[t]/den*100}%"></i>`);
-    const tags = ['ferie','rol','perm','mal'].filter(t => ds[t]).map(t => `<span class="tag t-${t}"><span class="ms">${TYPES[t].icon}</span>${TYPES[t].label} ${fmtHM(ds[t])}</span>`).join('');
+    const dv = t => t === 'ferie' ? ds.ferie - ds.chiu : ds[t];
+    for (const t of ['ferie','chiu','rol','perm','mal']) if (dv(t) > 0.001) segs.push(`<i class="t-${t}" style="width:${dv(t)/den*100}%"></i>`);
+    const tags = ['ferie','chiu','rol','perm','mal'].filter(t => dv(t) > 0.001).map(t => `<span class="tag t-${t}"><span class="ms">${TYPES[t].icon}</span>${t === 'chiu' ? 'Chiusura' : TYPES[t].label} ${fmtHM(dv(t))}</span>`).join('');
     const lc = (S.days.get(inf.key) || {}).loc;
     const ltag = lc && !out ? `<span class="tag lc" title="${esc(LOCS[lc])}"><span class="ms">${LOC_IC[lc]}</span>${LOC_S[lc]}</span>` : '';
     html += `<button class="${cls}" data-goto="${inf.key}" aria-label="${d.getDate()} ${MON_L[d.getMonth()]}${inf.hol ? ', ' + esc(inf.hol) : ''}, ${fmtHM(ds.total)}">
@@ -1918,7 +1928,7 @@ function leaveBalance(){
   for (const [k, d] of S.days){
     if (k <= from) continue;
     for (const x of d.entries){ const h = (x.e - x.s)/60;
-      if (x.t === 'ferie'){ if (k <= tk) F.used += h; else if (k.slice(0,4) == y) F.plan += h; }
+      if (x.t === 'ferie' || x.t === 'chiu'){ if (k <= tk) F.used += h; else if (k.slice(0,4) == y) F.plan += h; }
       if (x.t === 'rol'){ if (k <= tk) R.used += h; else if (k.slice(0,4) == y) R.plan += h; } }
   }
   for (const X of [F, R]){ X.now = X.base + X.acc - X.used; X.eoy = X.base + X.accEoy - X.used - X.plan; }
@@ -1947,7 +1957,7 @@ function renderPane(){
     const pc = Math.round(Math.min(1, (r.total) / tot) * 100);
     const leg = [`<li class="lav"><i></i><span>Lavoro</span><b>${fmtHM(r.lav)}</b></li>`];
     if (r.rol) leg.push(`<li class="rol"><i></i><span>ROL</span><b>${fmtHM(r.rol)}</b></li>`);
-    if (r.ferie) leg.push(`<li class="ferie"><i></i><span>Ferie</span><b>${fmtN(r.ferie/dh)} gg</b></li>`);
+    if (r.ferie) leg.push(`<li class="ferie"><i></i><span>${r.chiu ? 'Ferie e chiusura' : 'Ferie'}</span><b>${fmtN(r.ferie/dh)} gg</b></li>`);
     if (r.mal + r.perm) leg.push(`<li class="mal"><i></i><span>Malattia</span><b>${fmtN((r.mal + r.perm)/dh)} gg</b></li>`);
     html += `<section class="card white sum"><h3 class="t-title-m">Riepilogo ${pName}</h3>
     <div class="ring-wrap">
@@ -1965,7 +1975,7 @@ function renderPane(){
       !st.projects.some(activeP) ? `<span class="muted">Non hai ancora progetti. Creane uno per iniziare a registrare le ore.</span>` : `<span class="muted">Nessuna ora registrata in questo periodo.</span>`}
   </section>`;
   html += `<section class="card white"><h3 class="t-title-m">Assenze ${pName}</h3><div class="abs-grid">
-    ${['ferie','rol','mal'].map(t => `<div class="abs-it t-${t}"><span class="ms">${TYPES[t].icon}</span><div><b>${t === 'rol' ? fmtHM(r[t]) : fmtN(r[t]/dh) + ' gg'}</b><span>${TYPES[t].label}${t === 'rol' ? ' · ' + fmtN(r[t]/dh) + ' gg' : ''}</span></div></div>`).join('')}
+    ${['ferie','rol','mal'].map(t => `<div class="abs-it t-${t}"><span class="ms">${TYPES[t].icon}</span><div><b>${t === 'rol' ? fmtHM(r[t]) : fmtN(r[t]/dh) + ' gg'}</b><span>${TYPES[t].label}${t === 'ferie' && r.chiu ? `<small class="subn">${fmtN(r.chiu/dh)} gg chiusura</small>` : ''}${t === 'rol' ? ' · ' + fmtN(r[t]/dh) + ' gg' : ''}</span></div></div>`).join('')}
   </div></section>`;
   const LB = leaveBalance(), F = LB.F, Rr = LB.R, pct = (u, tot) => Math.max(0, Math.min(100, tot > 0 ? u/tot*100 : 0));
   html += `<section class="card ink"><div class="ch"><h3 class="t-title-m">Saldo ferie e ROL</h3><button class="btn tonal sm sl has-icon" data-act="leave"><span class="ms">edit</span>${LB.mode === 'busta' ? 'Modifica saldo' : 'Imposta saldo'}</button></div>
@@ -2130,7 +2140,7 @@ function openEntry(k, s, e, editId){
       <span class="err-text" id="timeErr" hidden>L'orario di fine deve essere dopo l'inizio.</span>
     </section>
     <section><span class="t-title-s">Tipo</span>
-      <div class="chips">${Object.entries(TYPES).filter(([t,v]) => !v.hidden || t === state.t).map(([t,v]) => `<button type="button" class="chip sl" data-type="${t}" aria-pressed="${t === state.t}"><span class="ms">${t === state.t ? 'check' : v.icon}</span>${v.label}</button>`).join('')}</div>
+      <div class="chips">${Object.entries(TYPES).filter(([t,v]) => !v.hidden || t === state.t).map(([t,v]) => `<button type="button" class="chip sl" data-type="${t}" aria-pressed="${t === state.t}" title="${v.label}"><span class="ms">${t === state.t ? 'check' : v.icon}</span>${v.short || v.label}</button>`).join('')}</div>
     </section>
     <section id="projSec">
       <div class="tf" id="projSelWrap"><label for="fProj">Progetto</label><select id="fProj">${noneOpt(state.p)}${projectOptions(state.p)}${NEWOPT}</select></div>
@@ -2304,6 +2314,7 @@ function dayMenu(btn, k){
     {icon:'event_note', label:'Luogo e nota del giorno', fn:() => openDayDetails(k)},
     '-',
     {icon:'beach_access', label:'Ferie (giornata intera)', fn:() => fillDay(k,'ferie')},
+    {icon:'lock', label:'Chiusura aziendale (giornata intera)', fn:() => fillDay(k,'chiu')},
     {icon:'medical_services', label:'Malattia (giornata intera)', fn:() => fillDay(k,'mal')},
     ...(has ? ['-', {icon:'delete_sweep', label:'Svuota giornata', danger:true, fn:() => { const before = snapshotDays([k]); S.days.set(k, normDay(null,k)); commit([k], before, 'Giornata svuotata'); }}] : [])
   ]);
